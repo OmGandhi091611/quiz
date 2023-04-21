@@ -1,0 +1,35 @@
+<mat-toolbar color="primary" class="toolbar-container">
+  <button mat-icon-button (click)="logout()" class="back-button">
+    <mat-icon matSuffix>arrow_back</mat-icon>
+  </button>
+  <button mat-icon-button (click)="onAddQuestions()" class="add-button">
+    <mat-icon matSuffix>add</mat-icon>
+  </button>
+  Quiz
+</mat-toolbar>
+<div class="form-wraper">
+  <div class="form-container card">
+    <div class="form-body">
+      <label class="justifier"> {{currentDocument?.question}} </label>
+        <mat-radio-group
+          [(ngModel)]="selectedAnswers[currentDocumentIndex]"
+          aria-labelledby="radio-group-label"
+          class="justifier-content">
+          <mat-radio-button class="example-radio-button" *ngFor="let option of currentDocument?.options" [value]="option">
+            <span class="radio-label"> {{option}} </span>
+          </mat-radio-button>
+        </mat-radio-group>
+      </div>
+        <button mat-raised-button class="next" (click)="previousQuestion()" [disabled]="isFirst()">
+          <mat-icon matSuffix class="mirror">play_arrow</mat-icon>
+        </button>
+        <button mat-raised-button class="next" (click)="nextQuestion()" [disabled]="isLast()">
+          <mat-icon matSuffix>play_arrow</mat-icon>
+        </button>
+          <button mat-raised-button class="submitAnswer" (click)="submitAnswers()" color="primary" *ngIf="currentDocumentIndex === mcqDocuments.length - 1">
+            <mat-label>Submit</mat-label>
+          </button>
+      <div class="form-footer">
+      </div>
+  </div>
+</div>

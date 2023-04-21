@@ -1,0 +1,38 @@
+<mat-toolbar color="primary" class="toolbar-container">Sign In</mat-toolbar>
+<div class="form-wraper">
+  <div class="form-container card">
+    <div class="form-body">
+      <mat-form-field class="justifier">
+          <mat-label>Email</mat-label>
+          <input matInput type="text" class="form-input" [(ngModel)]="username">
+      </mat-form-field>
+      <mat-form-field class="justifier">
+          <mat-label>Password</mat-label>
+          <input matInput [type]="hide ? 'password' : 'text'"  class="form-input" [(ngModel)]="password">
+          <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+            <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+          </button>
+      </mat-form-field>
+    </div>
+
+    <div class="form-footer">
+        <button mat-raised-button class="btn custom-btn" (click)="login()" color="primary">
+            <mat-icon>input</mat-icon> <strong> Sign In</strong>
+        </button>
+        <div class="txt">
+          OR
+        </div>
+        <button mat-raised-button class="btn" (click)="signInWithGoogle()">
+          <img src="../../../assets/icons8-google-48.png" alt="" class="google-icon" height="24px" width="24px"> <strong>  Sign In With Google</strong>
+        </button>
+    </div>
+    <div class="additional-link">
+      Don't have an Account? <a routerLink="/register"> <strong>Create an account</strong></a>
+    </div>
+    <br/>
+    <div class="additional-link">
+      Forgot Password?<a routerLink="login/forgot-password"> <strong> Reset the Password</strong></a>
+    </div>
+  </div>
+</div>
+

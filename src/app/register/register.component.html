@@ -1,0 +1,28 @@
+<mat-toolbar color="primary" class="toolbar-container">Sign Up</mat-toolbar>
+<div class="form-wraper">
+  <div class="form-container card">
+    <div class="form-body">
+      <mat-form-field class="justifier">
+          <mat-label>Email</mat-label>
+          <input matInput type="text" class="form-input" [(ngModel)]="username">
+      </mat-form-field>
+      <mat-form-field class="justifier">
+          <mat-label>Password</mat-label>
+          <input matInput [type]="hide ? 'password' : 'text'" class="form-input" [(ngModel)]="password">
+          <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+            <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+          </button>
+      </mat-form-field>
+    </div>
+
+    <div class="form-footer">
+        <button mat-raised-button class="btn custom-btn" (click)="register()" color="primary">
+            <mat-icon>input</mat-icon><strong> Sign Up</strong>
+        </button>
+
+    </div>
+    <div class="additional-link">
+      Already have an account? <a routerLink="/"> <strong>Sign In</strong></a>
+    </div>
+  </div>
+</div>

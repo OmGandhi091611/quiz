@@ -1,0 +1,38 @@
+<mat-toolbar color="primary" class="toolbar-container">
+  <button mat-icon-button class="back-button" (click)="back()">
+    <mat-icon matSuffix>arrow_back</mat-icon>
+  </button>
+  Add Questions
+</mat-toolbar>
+<div class="form-wraper">
+  <div class="form-container card">
+    <div class="form-body">
+      <form [formGroup]="questionForm">
+        <h2 style="padding-top: 20px;">Question: </h2>
+        <mat-form-field class="justifier">
+        <mat-label>Question</mat-label>
+        <input matInput type="text" class="form-input" formControlName="question">
+      </mat-form-field>
+      <h2>Options: </h2>
+      <div formArrayName="options">
+        <mat-form-field class="justifier" *ngFor="let option of options.controls; let i = index">
+          <mat-label>Options {{i + 1}} </mat-label>
+          <input matInput type="text" class="form-input" [formControlName]="i">
+        </mat-form-field>
+      </div>
+      <!-- <button mat-raised-button color="primary" class="submitquestions" (click)="addOption()">Add Option</button> -->
+      <h2 class="answer">Correct Answer: </h2>
+      <mat-form-field class="justifier">
+        <mat-select formControlName="correctAnswer">
+          <mat-option *ngFor="let option of options.controls; let i = index" [value]="option.value">
+            {{ option.value }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <button mat-raised-button color="primary" class="submitquestions" (click)="submit()"> <mat-icon>add</mat-icon> Add Question</button>
+      </form>
+    </div>
+      <div class="form-footer">
+      </div>
+  </div>
+</div>
