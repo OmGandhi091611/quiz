@@ -10,7 +10,7 @@ export class AuthService {
   constructor(private fireauth: AngularFireAuth, private router: Router, private afauth: AngularFireAuth) { }
   login(email : string, password : string) {
     this.fireauth.signInWithEmailAndPassword(email , password).then( res => {
-      // console.log(res.user?.displayName);
+      // console.log(res);
       this.router.navigate(['/dashboard']);
     }, err => {
         alert(err.message);
@@ -56,10 +56,19 @@ export class AuthService {
   }
   // Sign In with Google
   googleSignIn() {
-    return this.fireauth.signInWithPopup(new GoogleAuthProvider).then(res => {
-      this.router.navigate(['./dashboard']);
-      localStorage.setItem('token', JSON.stringify(res.user?.uid));
-    })
+    const provider = new GoogleAuthProvider();
+    provider.setCustomParameters({ prompt: 'select_account' });
+
+    const displayName = prompt('Please enter a username ');
+    if (!displayName) return;
+
+    return this.fireauth.signInWithPopup(provider).then(res => {
+      const user = res.user;
+      user!.updateProfile({ displayName }).then(() => {
+        this.router.navigate(['./dashboard']);
+        localStorage.setItem('token', JSON.stringify(user!.uid));
+      });
+    });
   }
   getUserId(): string {
     let userId = '';

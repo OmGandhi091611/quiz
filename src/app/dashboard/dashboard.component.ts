@@ -83,8 +83,8 @@ export class DashboardComponent implements OnInit{
           const displayName = user?.displayName;
           this.firestore.collection('scores').doc(displayName!).set({
             score : score,
+            username : displayName,
           })
-          console.log(displayName);
         }
         else {
           console.log("Error");

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AngularFireAuth } from '@angular/fire/compat/auth';
+import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { ActivatedRoute, Router } from '@angular/router';
 @Component({
   selector: 'app-submit-answers',
@@ -7,28 +7,21 @@ import { ActivatedRoute, Router } from '@angular/router';
   styleUrls: ['./submit-answers.component.scss']
 })
 export class SubmitAnswersComponent  implements OnInit{
-  score!: number;
-  totalQuestions!: number;
   currentDocumentIndex!: number;
-  username!: string;
+  totalQuestions!: number;
+  scores: any[] = [];
   ngOnInit(): void {
     this.route.queryParams.subscribe(params => {
-      this.score = parseInt(params['score']);
-      this.totalQuestions = parseInt(params['totalQuestions']);
       this.currentDocumentIndex = parseInt(params['currentDocumentIndex']);
+      this.totalQuestions = parseInt(params['totalQuestions']);
     });
-    this.retriveEmail()
+    this.firestore.collection('scores', ref => ref.orderBy('score', 'desc')).valueChanges().subscribe((scores) => {
+      this.scores = scores;
+    })
   }
-  constructor(private router: Router, private route: ActivatedRoute, private afauth : AngularFireAuth) {
+  constructor(private router: Router, private route: ActivatedRoute, private firestore : AngularFirestore) {
   }
   goBack() {
     this.router.navigate(['dashboard'], {queryParams: {currentDocumentIndex: this.currentDocumentIndex}});
-  }
-  async retriveEmail() {
-    const user = await this.afauth.currentUser;
-    if (user) {
-      const name = user.displayName!;
-      this.username = name;
-    }
   }
 }
