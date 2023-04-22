@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { Router } from '@angular/router';
-import { GoogleAuthProvider } from '@angular/fire/auth';
+import { GoogleAuthProvider, user } from '@angular/fire/auth';
 @Injectable({
   providedIn: 'root'
 })
@@ -10,15 +10,18 @@ export class AuthService {
   constructor(private fireauth: AngularFireAuth, private router: Router, private afauth: AngularFireAuth) { }
   login(email : string, password : string) {
     this.fireauth.signInWithEmailAndPassword(email , password).then( res => {
-        this.router.navigate(['/dashboard']);
+      // console.log(res.user?.displayName);
+      this.router.navigate(['/dashboard']);
     }, err => {
         alert(err.message);
         this.router.navigate(['']);
     })
   }
   // register method
-  register(email : string, password : string) {
-    this.fireauth.createUserWithEmailAndPassword(email , password).then( res => {
+  register(email : string, password : string, displayName : string) {
+    this.fireauth.createUserWithEmailAndPassword(email , password).then( async res => {
+      await this.updateProfile(displayName);
+      // console.log(res);
       this.router.navigate(['/dashboard']);
     }, err => {
       alert(err.message);
@@ -66,5 +69,9 @@ export class AuthService {
       }
     });
     return userId;
+  }
+  async updateProfile(displayName: string) {
+    const user = await this.fireauth.currentUser;
+    await user?.updateProfile({ displayName });
   }
 }

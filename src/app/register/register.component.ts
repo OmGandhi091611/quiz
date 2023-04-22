@@ -9,6 +9,7 @@ export class RegisterComponent implements OnInit{
   hide = true;
   username : string = '';
   password : string = '';
+  displayName : string = '';
   constructor(private auth: AuthService) {}
   ngOnInit(): void {}
   register() {
@@ -20,8 +21,9 @@ export class RegisterComponent implements OnInit{
       alert('Please enter a valid password');
       return;
     }
-    this.auth.register(this.username , this.password);
+    this.auth.register(this.username , this.password, this.displayName);
     this.username = '';
     this.password = '';
+    this.displayName = '';
   }
 }

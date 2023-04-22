@@ -3,6 +3,7 @@ import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { AuthService } from '../shared/auth.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
+import { User } from '@angular/fire/auth';
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
@@ -79,7 +80,7 @@ export class DashboardComponent implements OnInit{
     } else {
       this.afauth.onAuthStateChanged((user) => {
         if(user) {
-          const displayName = user?.email;
+          const displayName = user?.displayName;
           this.firestore.collection('scores').doc(displayName!).set({
             score : score,
           })
