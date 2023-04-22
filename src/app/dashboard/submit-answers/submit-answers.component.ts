@@ -13,7 +13,6 @@ export class SubmitAnswersComponent  implements OnInit{
   ngOnInit(): void {
     this.route.queryParams.subscribe(params => {
       this.currentDocumentIndex = parseInt(params['currentDocumentIndex']);
-      this.totalQuestions = parseInt(params['totalQuestions']);
     });
     this.firestore.collection('scores', ref => ref.orderBy('score', 'desc')).valueChanges().subscribe((scores) => {
       this.scores = scores;

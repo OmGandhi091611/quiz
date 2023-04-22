@@ -28,6 +28,10 @@ export class DashboardComponent implements OnInit{
     });
   }
   nextQuestion() {
+    if (this.selectedAnswers[this.currentDocumentIndex] === null) {
+      alert('Please select an answer before moving to the next question.');
+      return;
+    }
     if(this.currentDocumentIndex < this.mcqDocuments.length - 1) {
       this.currentDocumentIndex++;
       this.currentDocument = this.mcqDocuments[this.currentDocumentIndex];
@@ -84,10 +88,8 @@ export class DashboardComponent implements OnInit{
           this.firestore.collection('scores').doc(displayName!).set({
             score : score,
             username : displayName,
+            totalQuestions: totalQuestions,
           })
-        }
-        else {
-          console.log("Error");
         }
       });
       this.router.navigate(['dashboard/submit-answers'], { queryParams: { score: score, totalQuestions: totalQuestions, currentDocumentIndex: this.currentDocumentIndex}});

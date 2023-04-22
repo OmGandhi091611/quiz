@@ -3,13 +3,13 @@
   <div class="form-container card">
     <div class="form-body">
       <mat-form-field class="justifier">
-        <mat-label>Username</mat-label>
-        <input matInput type="text" class="form-input" [(ngModel)]="displayName">
-    </mat-form-field>
-      <mat-form-field class="justifier">
           <mat-label>Email</mat-label>
           <input matInput type="email" class="form-input" [(ngModel)]="username">
       </mat-form-field>
+      <mat-form-field class="justifier">
+        <mat-label>Username</mat-label>
+        <input matInput type="text" class="form-input" [(ngModel)]="displayName">
+    </mat-form-field>
       <mat-form-field class="justifier">
           <mat-label>Password</mat-label>
           <input matInput [type]="hide ? 'password' : 'text'" class="form-input" [(ngModel)]="password">
