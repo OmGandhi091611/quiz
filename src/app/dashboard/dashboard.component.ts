@@ -35,13 +35,13 @@ export class DashboardComponent implements OnInit{
       return;
     }
     this.formSubmitted[this.currentDocumentIndex] = true;
-    this.selectedAnswers[this.currentDocumentIndex] = this.selectedAnswers[this.currentDocumentIndex];
     if (this.currentDocumentIndex < this.mcqDocuments.length - 1) {
       this.currentDocumentIndex++;
       this.currentDocument = this.mcqDocuments[this.currentDocumentIndex];
       this.updateUrl();
       this.showError = false;
     }
+    // console.log(`Moving to question ${this.currentDocumentIndex + 1}`);
   }
   previousQuestion() {
     if(this.currentDocumentIndex > 0) {
