@@ -41,7 +41,7 @@ export class DashboardComponent implements OnInit{
       this.updateUrl();
       this.showError = false;
     }
-    console.log(`Moving to question ${this.currentDocumentIndex + 1}`);
+    // console.log(`Moving to question ${this.currentDocumentIndex + 1}`);
   }
   previousQuestion() {
     if(this.currentDocumentIndex > 0) {
@@ -94,6 +94,7 @@ export class DashboardComponent implements OnInit{
             score : score,
             username : displayName,
             totalQuestions: totalQuestions,
+            email : user.email,
           })
         }
       });

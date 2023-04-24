@@ -86,7 +86,7 @@ export class AuthService {
       } else {
         localStorage.setItem('token', JSON.stringify(uid));
         this.router.navigate(['./dashboard']);
-        // console.log(user);
+        console.log(user);
       }
     });
   };
