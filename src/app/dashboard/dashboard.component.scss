@@ -112,11 +112,16 @@ body{
 
 .next{
   margin-left: 170px;
+  margin-top: 50px;
 }
 .submitAnswer{
   display: block;
   margin: 0 auto;
   margin-top: 50px;
+}
+.error-message{
+  color: red;
+  font-size: 16px;
 }
 /*
 ##Device = Desktops

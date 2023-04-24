@@ -3,7 +3,6 @@ import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { AuthService } from '../shared/auth.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
-import { User } from '@angular/fire/auth';
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
@@ -16,6 +15,8 @@ export class DashboardComponent implements OnInit{
   currentDocument: any;
   question: any;
   correctAnswer: any;
+  showError = false;
+  formSubmitted: boolean[] = [];
   constructor(private afauth : AngularFireAuth, private firestore : AngularFirestore, private auth : AuthService, private router : Router, private route : ActivatedRoute) {}
   ngOnInit(): void {
     this.route.queryParams.subscribe(params => {
@@ -26,16 +27,20 @@ export class DashboardComponent implements OnInit{
       this.currentDocument = this.mcqDocuments[this.currentDocumentIndex];
       this.selectedAnswers = Array(this.mcqDocuments.length).fill(null);
     });
+    this.formSubmitted = Array(this.mcqDocuments.length).fill(false);
   }
   nextQuestion() {
     if (this.selectedAnswers[this.currentDocumentIndex] === null) {
-      alert('Please select an answer before moving to the next question.');
+      this.showError = true;
       return;
     }
-    if(this.currentDocumentIndex < this.mcqDocuments.length - 1) {
+    this.formSubmitted[this.currentDocumentIndex] = true;
+    this.selectedAnswers[this.currentDocumentIndex] = this.selectedAnswers[this.currentDocumentIndex];
+    if (this.currentDocumentIndex < this.mcqDocuments.length - 1) {
       this.currentDocumentIndex++;
       this.currentDocument = this.mcqDocuments[this.currentDocumentIndex];
       this.updateUrl();
+      this.showError = false;
     }
   }
   previousQuestion() {

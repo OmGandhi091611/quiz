@@ -19,11 +19,12 @@
             <span class="radio-label"> {{option}} </span>
           </mat-radio-button>
         </mat-radio-group>
+        <div class="error-message" *ngIf="formSubmitted[currentDocumentIndex] && !selectedAnswers[currentDocumentIndex]">* Please Answer this question</div>
       </div>
         <button mat-raised-button class="next" (click)="previousQuestion()" [disabled]="isFirst()">
           <mat-icon matSuffix class="mirror">play_arrow</mat-icon>
         </button>
-        <button mat-raised-button class="next" (click)="nextQuestion()" [disabled]="isLast()">
+        <button mat-raised-button class="next" (click)="nextQuestion()" [disabled]="isLast()" (focus)="formSubmitted[currentDocumentIndex] = true">
           <mat-icon matSuffix>play_arrow</mat-icon>
         </button>
           <button mat-raised-button class="submitAnswer" (click)="submitAnswers()" color="primary" *ngIf="currentDocumentIndex === mcqDocuments.length - 1">
