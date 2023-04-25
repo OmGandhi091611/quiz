@@ -42,7 +42,7 @@ export class DashboardComponent implements OnInit{
       this.updateUrl();
       this.showError = false;
     }
-    console.log(`Moving to question ${this.questionNo + 1}`);
+    // console.log(`Moving to question ${this.questionNo + 1}`);
   }
   previousQuestion() {
     if(this.questionNo > 0) {
