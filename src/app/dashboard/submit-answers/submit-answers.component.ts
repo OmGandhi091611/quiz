@@ -7,12 +7,12 @@ import { ActivatedRoute, Router } from '@angular/router';
   styleUrls: ['./submit-answers.component.scss']
 })
 export class SubmitAnswersComponent  implements OnInit{
-  currentDocumentIndex!: number;
+  questionNo!: number;
   totalQuestions!: number;
   scores: any[] = [];
   ngOnInit(): void {
     this.route.queryParams.subscribe(params => {
-      this.currentDocumentIndex = parseInt(params['currentDocumentIndex']);
+      this.questionNo = parseInt(params['questionNo']);
     });
     this.firestore.collection('scores', ref => ref.orderBy('score', 'desc')).valueChanges().subscribe((scores) => {
       this.scores = scores;
@@ -21,6 +21,6 @@ export class SubmitAnswersComponent  implements OnInit{
   constructor(private router: Router, private route: ActivatedRoute, private firestore : AngularFirestore) {
   }
   goBack() {
-    this.router.navigate(['dashboard'], {queryParams: {currentDocumentIndex: this.currentDocumentIndex}});
+    this.router.navigate(['dashboard'], {queryParams: {questionNo: this.questionNo + 1}});
   }
 }

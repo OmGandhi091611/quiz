@@ -13,12 +13,14 @@
     <tr>
       <th>Username</th>
       <th>Score</th>
+      <th>Grade</th>
     </tr>
   </thead>
   <tbody>
     <tr *ngFor="let score of scores">
       <td>{{ score.username }}</td>
-      <td>{{ score.score }} / {{ score.totalQuestions }} </td>
+      <td>{{ score.score }}/{{ score.totalQuestions }} </td>
+      <td><span *ngIf="(score.score * 100) / score.totalQuestions > 40">Pass</span> <span *ngIf="(score.score * 100) / score.totalQuestions < 40">Fail</span> </td>
     </tr>
   </tbody>
 </table>

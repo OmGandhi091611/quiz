@@ -66,12 +66,12 @@ export class AuthService {
         }).then(() =>{
           this.router.navigate(['./login/username']);
         });
-        // console.log(user);
+        console.log(user);
         return;
       } else {
-        localStorage.setItem('uid', JSON.stringify(uid));
+        localStorage.setItem('token', JSON.stringify(uid));
         this.router.navigate(['./dashboard']);
-        // console.log(user);
+        console.log(user);
       }
     });
   };

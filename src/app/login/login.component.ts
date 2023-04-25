@@ -8,21 +8,23 @@ import { AuthService } from '../shared/auth.service';
 })
 export class LoginComponent implements OnInit{
   hide = true;
-  username : string = '';
+  email : string = '';
   password : string = '';
+  emailErrorMessage! : string;
+  passwordErrorMessage! : string;
   constructor(private auth: AuthService) {}
   ngOnInit(): void {}
   login() {
-    if(this.username == '') {
-      alert('Please enter the email-ID');
+    if(this.email == '') {
+      this.emailErrorMessage = "* Please Enter the email ID."
       return;
     }
     if(this.password == '') {
-      alert('Please enter the Password');
+      this.passwordErrorMessage = "* Please Enter the correct password."
       return;
     }
-    this.auth.login(this.username , this.password);
-    this.username = '';
+    this.auth.login(this.email , this.password);
+    this.email = '';
     this.password = '';
   }
   signInWithGoogle() {

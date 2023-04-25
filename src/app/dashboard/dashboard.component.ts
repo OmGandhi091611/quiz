@@ -11,7 +11,7 @@ import { AngularFirestore } from '@angular/fire/compat/firestore';
 export class DashboardComponent implements OnInit{
   mcqDocuments: any[] = [];
   selectedAnswers: string[] = [];
-  currentDocumentIndex = 0;
+  questionNo : number = 0;
   currentDocument: any;
   question: any;
   correctAnswer: any;
@@ -20,40 +20,42 @@ export class DashboardComponent implements OnInit{
   constructor(private afauth : AngularFireAuth, private firestore : AngularFirestore, private auth : AuthService, private router : Router, private route : ActivatedRoute) {}
   ngOnInit(): void {
     this.route.queryParams.subscribe(params => {
-      this.currentDocumentIndex = parseInt(params['currentDocumentIndex']) || 0;
+      this.questionNo = parseInt(params['questionNo'], 10) - 1 || 0; // Initialize questionNo from query parameter or default to 0
+      this.currentDocument = this.mcqDocuments[this.questionNo];
     });
     this.firestore.collection('questions').valueChanges().subscribe((questions: any[]) => {
       this.mcqDocuments = questions;
-      this.currentDocument = this.mcqDocuments[this.currentDocumentIndex];
+      this.currentDocument = this.mcqDocuments[this.questionNo];
       this.selectedAnswers = Array(this.mcqDocuments.length).fill(null);
     });
     this.formSubmitted = Array(this.mcqDocuments.length).fill(false);
   }
   nextQuestion() {
-    if (this.selectedAnswers[this.currentDocumentIndex] === null) {
+    if (this.selectedAnswers[this.questionNo] === null) {
       this.showError = true;
       return;
     }
-    this.formSubmitted[this.currentDocumentIndex] = true;
-    if (this.currentDocumentIndex < this.mcqDocuments.length - 1) {
-      this.currentDocumentIndex++;
-      this.currentDocument = this.mcqDocuments[this.currentDocumentIndex];
+    this.formSubmitted[this.questionNo] = true;
+    if (this.questionNo < this.mcqDocuments.length - 1) {
+      this.questionNo++;
+      this.currentDocument = this.mcqDocuments[this.questionNo];
       this.updateUrl();
       this.showError = false;
     }
-    // console.log(`Moving to question ${this.currentDocumentIndex + 1}`);
+    console.log(`Moving to question ${this.questionNo + 1}`);
   }
   previousQuestion() {
-    if(this.currentDocumentIndex > 0) {
-      this.currentDocumentIndex--;
-      this.currentDocument = this.mcqDocuments[this.currentDocumentIndex];
+    if(this.questionNo > 0) {
+      this.questionNo--;
+      this.currentDocument = this.mcqDocuments[this.questionNo];
       this.updateUrl();
     }
   }
   updateUrl() {
+    const questionNo = this.questionNo + 1
     this.router.navigate([], {
       relativeTo: this.route,
-      queryParams: { currentDocumentIndex: this.currentDocumentIndex },
+      queryParams: { questionNo },
       queryParamsHandling: 'merge'
     });
   }
@@ -61,11 +63,11 @@ export class DashboardComponent implements OnInit{
     this.auth.logout();
   }
   isFirst() {
-    return this.currentDocumentIndex === 0;
+    return this.questionNo === 0;
   }
 
   isLast() {
-    return this.currentDocumentIndex === this.mcqDocuments.length - 1;
+    return this.questionNo === this.mcqDocuments.length - 1;
   }
   onAddQuestions() {
     this.router.navigate(['dashboard/add-questions']);
@@ -82,10 +84,9 @@ export class DashboardComponent implements OnInit{
     }
     const totalQuestions = this.mcqDocuments.length;
     if(unansweredQuestions.length > 0) {
-      this.currentDocumentIndex = unansweredQuestions[0];
-      this.currentDocument = this.mcqDocuments[this.currentDocumentIndex];
-      this.router.navigate(['dashboard'], { queryParams: { currentDocumentIndex: this.currentDocumentIndex }});
-      alert(`Please answer question ${this.currentDocumentIndex + 1}`);
+      this.questionNo = unansweredQuestions[0];
+      this.currentDocument = this.mcqDocuments[this.questionNo];
+      this.router.navigate(['dashboard'], { queryParams: { questionNo: this.questionNo + 1 }});
     } else {
       this.afauth.onAuthStateChanged((user) => {
         if(user) {
@@ -98,7 +99,7 @@ export class DashboardComponent implements OnInit{
           })
         }
       });
-      this.router.navigate(['dashboard/submit-answers'], { queryParams: { score: score, totalQuestions: totalQuestions, currentDocumentIndex: this.currentDocumentIndex}});
+      this.router.navigate(['dashboard/submit-answers'], { queryParams: { score: score, totalQuestions: totalQuestions, questionNo: this.questionNo}});
     }
   }
 }
