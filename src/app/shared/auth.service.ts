@@ -59,21 +59,19 @@ export class AuthService {
     provider.setCustomParameters({ prompt: 'select_account' });
     return this.fireauth.signInWithPopup(provider).then(res => {
       const user = res.user;
-      const uid = user!.uid;
-      if (localStorage.getItem('uid') !== uid) {
-        this.router.navigate(['./login/username']);
-        // const displayName = prompt('Please enter a username');
-        // if (!displayName) return;
-        // user?.updateProfile({ displayName }).then(() => {
-        //   localStorage.setItem('uid', uid);
-        //   localStorage.setItem('token', JSON.stringify(uid));
-        //   this.router.navigate(['./dashboard']);
-        //   console.log(user);
-        // });
+      const uid = user?.uid;
+      if (user?.photoURL !== "null") {
+        user?.updateProfile({
+          photoURL : "null",
+        }).then(() =>{
+          this.router.navigate(['./login/username']);
+        });
+        // console.log(user);
+        return;
       } else {
-        localStorage.setItem('token', JSON.stringify(uid));
+        localStorage.setItem('uid', JSON.stringify(uid));
         this.router.navigate(['./dashboard']);
-        console.log(user);
+        // console.log(user);
       }
     });
   };
