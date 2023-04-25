@@ -1,0 +1,19 @@
+<mat-toolbar color="primary" class="toolbar-container">Enter Username</mat-toolbar>
+<div class="form-wraper">
+  <div class="form-container card">
+    <div class="form-body">
+      <mat-form-field class="justifier">
+          <mat-label>Username</mat-label>
+          <input matInput type="email" class="form-input" [(ngModel)]="username">
+      </mat-form-field>
+    </div>
+    <div class="form-footer">
+        <button mat-raised-button class="btn custom-btn" (click)="updateDisplayName()" color="primary">
+            <mat-icon>input</mat-icon> OK
+        </button>
+    </div>
+    <div class="additional-link">
+      Back to <a routerLink=""> <strong>Login</strong></a>
+    </div>
+  </div>
+</div>

@@ -9,6 +9,7 @@ const routes: Routes = [
   { path: 'dashboard/submit-answers', loadChildren: () => import('./dashboard/submit-answers/submit-answers.module').then(m => m.SubmitAnswersModule) },
   { path: 'login/forgot-password', loadChildren: () => import('./login/forgot-password/forgot-password.module').then(m => m.ForgotPasswordModule) },
   { path: 'login/verify-email', loadChildren: () => import('./login/verify-email/verify-email.module').then(m => m.VerifyEmailModule) },
+  { path: 'login/username', loadChildren: () => import('./login/username/username.module').then(m => m.UsernameModule) },
 ];
 
 @NgModule({

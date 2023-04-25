@@ -54,20 +54,6 @@ export class AuthService {
       alert(err.message)
     })
   }
-  // Sign In with Google
-  // googleSignIn() {
-  //   const provider = new GoogleAuthProvider();
-  //   provider.setCustomParameters({ prompt: 'select_account' });
-  //   const displayName = prompt('Please enter a username ');
-  //   if (!displayName) return;
-  //   return this.fireauth.signInWithPopup(provider).then(res => {
-  //     const user = res.user;
-  //     user!.updateProfile({ displayName }).then(() => {
-  //       this.router.navigate(['./dashboard']);
-  //       localStorage.setItem('token', JSON.stringify(user!.uid));
-  //     });
-  //   });
-  // }
   googleSignIn() {
     const provider = new GoogleAuthProvider();
     provider.setCustomParameters({ prompt: 'select_account' });
@@ -75,14 +61,15 @@ export class AuthService {
       const user = res.user;
       const uid = user!.uid;
       if (localStorage.getItem('uid') !== uid) {
-        const displayName = prompt('Please enter a username');
-        if (!displayName) return;
-        user?.updateProfile({ displayName }).then(() => {
-          localStorage.setItem('uid', uid);
-          localStorage.setItem('token', JSON.stringify(uid));
-          this.router.navigate(['./dashboard']);
-          // console.log(user);
-        });
+        this.router.navigate(['./login/username']);
+        // const displayName = prompt('Please enter a username');
+        // if (!displayName) return;
+        // user?.updateProfile({ displayName }).then(() => {
+        //   localStorage.setItem('uid', uid);
+        //   localStorage.setItem('token', JSON.stringify(uid));
+        //   this.router.navigate(['./dashboard']);
+        //   console.log(user);
+        // });
       } else {
         localStorage.setItem('token', JSON.stringify(uid));
         this.router.navigate(['./dashboard']);
