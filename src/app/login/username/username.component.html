@@ -3,10 +3,9 @@
   <div class="form-container card">
     <div class="form-body">
       <mat-form-field class="justifier">
-          <mat-label>Username</mat-label>
+          <mat-label>Full Name</mat-label>
           <input matInput type="text" class="form-input" [(ngModel)]="username">
       </mat-form-field>
-      <div class="error-message" *ngIf="errorMessage"> {{errorMessage}}  <br> {{anotherMessage}} <br> {{thirdMessage}} </div>
     </div>
     <div class="form-footer">
         <button mat-raised-button class="btn custom-btn" (click)="updateDisplayName()" color="primary">

@@ -15,13 +15,13 @@ export class UsernameComponent implements OnInit{
   thirdMessage! : string;
   ngOnInit(): void {}
   updateDisplayName() {
-    const usernameRegex = /^[a-z0-9]+$/;
-    if (!usernameRegex.test(this.username)) {
-      this.errorMessage = "* Username should be in lower case.";
-      this.anotherMessage = "* There should be no white spaces.";
-      this.thirdMessage = "* Only alphanumeric characters allowed."
-      return;
-    }
+    // const usernameRegex = /^[a-z0-9]+$/;
+    // if (!usernameRegex.test(this.username)) {
+    //   this.errorMessage = "* Username should be in lower case.";
+    //   this.anotherMessage = "* There should be no white spaces.";
+    //   this.thirdMessage = "* Only alphanumeric characters allowed."
+    //   return;
+    // }
     const userPromise = this.fireauth.currentUser;
     userPromise.then((user) => {
       user?.updateProfile({

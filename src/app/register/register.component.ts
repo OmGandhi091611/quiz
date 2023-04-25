@@ -18,13 +18,13 @@ export class RegisterComponent implements OnInit{
   constructor(private auth: AuthService) {}
   ngOnInit(): void {}
   register() {
-    const usernameRegex = /^[a-z0-9]+$/;
-    if (!usernameRegex.test(this.username)) {
-      this.errorMessage = "* Username should be in lower case.";
-      this.anotherMessage = "* There should be no white spaces.";
-      this.thirdMessage = "* Only alphanumeric characters allowed."
-      return;
-    }
+    // const usernameRegex = /^[a-z0-9]+$/;
+    // if (!usernameRegex.test(this.username)) {
+    //   this.errorMessage = "* Username should be in lower case.";
+    //   this.anotherMessage = "* There should be no white spaces.";
+    //   this.thirdMessage = "* Only alphanumeric characters allowed."
+    //   return;
+    // }
     if(this.email == '') {
       this.emailErrorMessage = "* Please Enter the email ID."
       return;

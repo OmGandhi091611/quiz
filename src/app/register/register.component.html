@@ -4,22 +4,21 @@
     <div class="form-body">
       <mat-form-field class="justifier">
           <mat-label>Email</mat-label>
-          <input matInput type="email" class="form-input" [(ngModel)]="email" (ngModelChange)="emailErrorMessage = ''">
+          <input matInput type="email" class="form-input" [(ngModel)]="email">
       </mat-form-field>
-    <div class="error-message" *ngIf="emailErrorMessage && !email"> {{emailErrorMessage}} </div>
+    <!-- <div class="error-message" *ngIf="emailErrorMessage && !email"> {{emailErrorMessage}} </div> -->
       <mat-form-field class="justifier">
-        <mat-label>Username</mat-label>
+        <mat-label>Full Name</mat-label>
         <input matInput type="text" class="form-input" [(ngModel)]="username">
     </mat-form-field>
-    <div class="error-message" *ngIf="errorMessage"> {{errorMessage}}  <br> {{anotherMessage}} <br> {{thirdMessage}} </div>
       <mat-form-field class="justifier">
           <mat-label>Password</mat-label>
-          <input matInput [type]="hide ? 'password' : 'text'" class="form-input" [(ngModel)]="password" (ngModelChange)="passwordErrorMessage = ''">
+          <input matInput [type]="hide ? 'password' : 'text'" class="form-input" [(ngModel)]="password">
           <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
             <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
           </button>
       </mat-form-field>
-    <div class="error-message" *ngIf="passwordErrorMessage && !password"> {{passwordErrorMessage}} </div>
+    <!-- <div class="error-message" *ngIf="passwordErrorMessage && !password"> {{passwordErrorMessage}} </div> -->
     </div>
 
     <div class="form-footer">
