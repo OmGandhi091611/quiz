@@ -1,0 +1,26 @@
+<mat-toolbar color="primary" class="toolbar-container">
+  <button mat-icon-button (click)="logout()" class="back-button">
+    <mat-icon matSuffix>arrow_back</mat-icon>
+  </button>
+  <button mat-icon-button (click)="addQuiz()" class="add-button">
+    <mat-icon matSuffix>add</mat-icon>
+  </button>
+  Quiz-List
+</mat-toolbar>
+<div class="form-wraper">
+  <div class="form-container card">
+    <div class="form-body">
+      <mat-card class="example-card" *ngFor="let quiz of quizzes">
+        <mat-card-header>
+          <mat-card-title>{{ quiz.title }}</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          {{ quiz.title }}
+        </mat-card-content>
+        <mat-card-actions>
+          <button mat-raised-button color="primary" (click)="takeQuiz(quiz.title)">Take this Quiz</button>
+        </mat-card-actions>
+      </mat-card>
+    </div>
+  </div>
+</div>

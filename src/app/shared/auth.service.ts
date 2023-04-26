@@ -11,7 +11,7 @@ export class AuthService {
   login(email : string, password : string) {
     this.fireauth.signInWithEmailAndPassword(email , password).then( res => {
       // console.log(res);
-      this.router.navigate(['/dashboard']);
+      this.router.navigate(['organisation']);
     }, err => {
         alert(err.message);
         this.router.navigate(['']);
@@ -22,7 +22,7 @@ export class AuthService {
     this.fireauth.createUserWithEmailAndPassword(email , password).then( async res => {
       await this.updateProfile(displayName);
       // console.log(res);
-      this.router.navigate(['/dashboard']);
+      this.router.navigate(['organisation']);
     }, err => {
       alert(err.message);
       this.router.navigate(['/register']);
@@ -70,7 +70,7 @@ export class AuthService {
         return;
       } else {
         localStorage.setItem('token', JSON.stringify(uid));
-        this.router.navigate(['./dashboard']);
+        this.router.navigate(['organisation']);
         // console.log(user);
       }
     });

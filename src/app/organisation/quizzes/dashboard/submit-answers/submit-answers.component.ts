@@ -8,11 +8,15 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 export class SubmitAnswersComponent  implements OnInit{
   questionNo!: number;
+  quizId! : string;
+  orgTitle! : string;
   totalQuestions!: number;
   scores: any[] = [];
   ngOnInit(): void {
     this.route.queryParams.subscribe(params => {
       this.questionNo = parseInt(params['questionNo']);
+      this.quizId = params['quizId']
+      this.orgTitle = params['orgTitle'];
     });
     this.firestore.collection('scores', ref => ref.orderBy('score', 'desc')).valueChanges().subscribe((scores) => {
       this.scores = scores;
@@ -21,6 +25,6 @@ export class SubmitAnswersComponent  implements OnInit{
   constructor(private router: Router, private route: ActivatedRoute, private firestore : AngularFirestore) {
   }
   goBack() {
-    this.router.navigate(['dashboard'], {queryParams: {questionNo: this.questionNo + 1}});
+    this.router.navigate(['organisation/quizzes/dashboard'], {queryParams: { quizId: this.quizId, orgTitle : this.orgTitle}});
   }
 }

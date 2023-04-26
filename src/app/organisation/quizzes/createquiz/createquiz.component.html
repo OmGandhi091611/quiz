@@ -1,0 +1,24 @@
+<mat-toolbar color="primary" class="toolbar-container">
+  <button mat-icon-button (click)="logout()" class="back-button">
+    <mat-icon matSuffix>arrow_back</mat-icon>
+  </button>
+  <button mat-icon-button (click)="addquiz()" class="add-button">
+    <mat-icon matSuffix>add</mat-icon>
+  </button>
+  Add Quiz
+</mat-toolbar>
+<div class="form-wraper">
+  <div class="form-container card">
+    <div class="form-body">
+      <mat-form-field class="justifier">
+          <mat-label>Subject Name</mat-label>
+          <input matInput type="text" class="form-input" [(ngModel)]="quiz">
+      </mat-form-field>
+    </div>
+    <div class="form-footer">
+        <button mat-raised-button class="btn custom-btn" (click)="addquiz()" color="primary">
+            <mat-icon>input</mat-icon> OK
+        </button>
+    </div>
+  </div>
+</div>

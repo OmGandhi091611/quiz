@@ -27,7 +27,7 @@ export class UsernameComponent implements OnInit{
       user?.updateProfile({
         displayName : this.username,
       }).then(() => {
-        this.router.navigate(['dashboard']);
+        this.router.navigate(['organisation']);
         // console.log(user);
       }).catch((error: any) => {
         console.log(error);

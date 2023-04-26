@@ -3,12 +3,12 @@
   <div class="form-container card">
     <div class="form-body">
       <mat-form-field class="justifier">
-          <mat-label>Full Name</mat-label>
-          <input matInput type="text" class="form-input" [(ngModel)]="username">
+          <mat-label>What's Your Organisation's Name</mat-label>
+          <input matInput type="text" class="form-input" [(ngModel)]="organisation">
       </mat-form-field>
     </div>
     <div class="form-footer">
-        <button mat-raised-button class="btn custom-btn" (click)="updateDisplayName()" color="primary">
+        <button mat-raised-button class="btn custom-btn" (click)="addorg()" color="primary">
             <mat-icon>input</mat-icon> OK
         </button>
     </div>

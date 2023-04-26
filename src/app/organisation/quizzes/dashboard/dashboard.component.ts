@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
-import { AuthService } from '../shared/auth.service';
+import { AuthService } from 'src/app/shared/auth.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 @Component({
@@ -17,19 +17,25 @@ export class DashboardComponent implements OnInit{
   correctAnswer: any;
   showError = false;
   formSubmitted: boolean[] = [];
-  constructor(private afauth : AngularFireAuth, private firestore : AngularFirestore, private auth : AuthService, private router : Router, private route : ActivatedRoute) {}
+  orgTitle: any;
+  quizId: any;
+  constructor(private afauth : AngularFireAuth, private firestore : AngularFirestore, private auth : AuthService, private router : Router, private route : ActivatedRoute) {};
   ngOnInit(): void {
     this.route.queryParams.subscribe(params => {
-      this.questionNo = parseInt(params['questionNo'], 10) - 1 || 0; // Initialize questionNo from query parameter or default to 0
-      this.currentDocument = this.mcqDocuments[this.questionNo];
+      this.questionNo = parseInt(params['questionNo'], 10) - 1 || 0;
+      this.quizId = params['quizId'];
+      this.orgTitle = params['orgTitle']
+      if (this.quizId) {
+        this.firestore.collection(`Organisations/${this.orgTitle}/Quizzes/${this.quizId}/questions`)
+        .valueChanges().subscribe((questions: any[]) => {
+          this.mcqDocuments = questions;
+          this.currentDocument = this.mcqDocuments[this.questionNo];
+          this.selectedAnswers = Array(this.mcqDocuments.length).fill(null);
+          this.formSubmitted = Array(this.mcqDocuments.length).fill(false);
+        });
+      }
     });
-    this.firestore.collection('questions').valueChanges().subscribe((questions: any[]) => {
-      this.mcqDocuments = questions;
-      this.currentDocument = this.mcqDocuments[this.questionNo];
-      this.selectedAnswers = Array(this.mcqDocuments.length).fill(null);
-    });
-    this.formSubmitted = Array(this.mcqDocuments.length).fill(false);
-  }
+  };
   nextQuestion() {
     if (this.selectedAnswers[this.questionNo] === null) {
       this.showError = true;
@@ -60,7 +66,7 @@ export class DashboardComponent implements OnInit{
     });
   }
   logout() {
-    this.auth.logout();
+    this.router.navigate(['organisation/quizzes'], { queryParams: { orgTitle: this.orgTitle } })
   }
   isFirst() {
     return this.questionNo === 0;
@@ -70,7 +76,7 @@ export class DashboardComponent implements OnInit{
     return this.questionNo === this.mcqDocuments.length - 1;
   }
   onAddQuestions() {
-    this.router.navigate(['dashboard/add-questions']);
+    this.router.navigate(['organisation/quizzes/dashboard/add-questions'], {queryParams : {orgTitle : this.orgTitle, quizId : this.quizId}});
   }
   submitAnswers() {
     let score = 0;
@@ -99,7 +105,7 @@ export class DashboardComponent implements OnInit{
           })
         }
       });
-      this.router.navigate(['dashboard/submit-answers'], { queryParams: { score: score, totalQuestions: totalQuestions, questionNo: this.questionNo}});
+      this.router.navigate(['organisation/quizzes/dashboard/submit-answers'], { queryParams: { score: score, totalQuestions: totalQuestions, questionNo: this.questionNo, orgTitle : this.orgTitle, quizId : this.quizId}});
     }
   }
 }
