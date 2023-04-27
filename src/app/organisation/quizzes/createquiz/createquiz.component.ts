@@ -17,15 +17,15 @@ export class CreatequizComponent implements OnInit{
     });
   };
   addquiz() {
-    const quizName = this.quiz.trim();
-    if (quizName) {
+    const quizId = this.quiz.trim();
+    if (quizId) {
       this.route.queryParams.subscribe(params => {
         const orgTitle = params['orgTitle'];
         const orgRef = this.firestore.collection('Organisations').doc(orgTitle);
-        orgRef.collection('Quizzes').doc(quizName).set({
-          title: quizName
+        orgRef.collection('Quizzes').doc(quizId).set({
+          title: quizId
         }).then(() => {
-          this.router.navigate(['organisation/quizzes/dashboard/add-questions'], { queryParams: { orgTitle: orgTitle, quizName: quizName } });
+          this.router.navigate(['organisation/quizzes/dashboard/add-questions'], { queryParams: { orgTitle: orgTitle, quizName: quizId } });
           this.quiz = '';
         }).catch(error => {
           console.error('Error creating quiz: ', error);

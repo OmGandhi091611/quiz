@@ -31,6 +31,6 @@ export class QuizzesComponent implements OnInit{
     this.router.navigate(['organisation/quizzes/createquiz'], { queryParams: { orgTitle: this.orgTitle } });
   }
   takeQuiz(quizId: string) {
-    this.router.navigate(['organisation/quizzes/dashboard'], { queryParams: { quizId: quizId, orgTitle: this.orgTitle } });
+    this.router.navigate(['organisation/quizzes/dashboard'], { queryParams: { quizName: quizId, orgTitle: this.orgTitle } });
   }
 }

@@ -19,18 +19,19 @@ export class DashboardComponent implements OnInit{
   formSubmitted: boolean[] = [];
   orgTitle: any;
   quizId: any;
-  constructor(private afauth : AngularFireAuth, private firestore : AngularFirestore, private auth : AuthService, private router : Router, private route : ActivatedRoute) {};
+  constructor(private afauth : AngularFireAuth, private firestore : AngularFirestore, private router : Router, private route : ActivatedRoute) {
+    this.selectedAnswers = Array(this.mcqDocuments.length).fill(null);
+  };
   ngOnInit(): void {
     this.route.queryParams.subscribe(params => {
       this.questionNo = parseInt(params['questionNo'], 10) - 1 || 0;
-      this.quizId = params['quizId'];
+      this.quizId = params['quizName'];
       this.orgTitle = params['orgTitle']
       if (this.quizId) {
         this.firestore.collection(`Organisations/${this.orgTitle}/Quizzes/${this.quizId}/questions`)
         .valueChanges().subscribe((questions: any[]) => {
           this.mcqDocuments = questions;
           this.currentDocument = this.mcqDocuments[this.questionNo];
-          this.selectedAnswers = Array(this.mcqDocuments.length).fill(null);
           this.formSubmitted = Array(this.mcqDocuments.length).fill(false);
         });
       }
@@ -76,7 +77,10 @@ export class DashboardComponent implements OnInit{
     return this.questionNo === this.mcqDocuments.length - 1;
   }
   onAddQuestions() {
-    this.router.navigate(['organisation/quizzes/dashboard/add-questions'], {queryParams : {orgTitle : this.orgTitle, quizId : this.quizId}});
+    this.router.navigate(['organisation/quizzes/dashboard/add-questions'], {queryParams : {orgTitle : this.orgTitle, quizName : this.quizId}});
+  }
+  onAnswerSelected(questionNo: number, answer: string) {
+    this.selectedAnswers[questionNo] = answer;
   }
   submitAnswers() {
     let score = 0;
@@ -92,7 +96,8 @@ export class DashboardComponent implements OnInit{
     if(unansweredQuestions.length > 0) {
       this.questionNo = unansweredQuestions[0];
       this.currentDocument = this.mcqDocuments[this.questionNo];
-      this.router.navigate(['dashboard'], { queryParams: { questionNo: this.questionNo + 1 }});
+      this.router.navigate(['organisation/quizzes/dashboard'], { queryParams: { questionNo: this.questionNo + 1 , orgTitle : this.orgTitle, quizName : this.quizId }});
+      console.log(this.selectedAnswers);
     } else {
       this.afauth.onAuthStateChanged((user) => {
         if(user) {
@@ -105,7 +110,7 @@ export class DashboardComponent implements OnInit{
           })
         }
       });
-      this.router.navigate(['organisation/quizzes/dashboard/submit-answers'], { queryParams: { score: score, totalQuestions: totalQuestions, questionNo: this.questionNo, orgTitle : this.orgTitle, quizId : this.quizId}});
+      this.router.navigate(['organisation/quizzes/dashboard/submit-answers'], { queryParams: { score: score, totalQuestions: totalQuestions, questionNo: this.questionNo, orgTitle : this.orgTitle, quizName : this.quizId}});
     }
   }
 }

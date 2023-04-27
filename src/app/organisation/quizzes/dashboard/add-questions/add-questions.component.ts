@@ -10,7 +10,13 @@ import { AngularFirestore } from '@angular/fire/compat/firestore';
 export class AddQuestionsComponent implements OnInit{
   questionForm!: FormGroup;
   orgTitle: any;
-  ngOnInit(): void {}
+  quizId: any;
+  ngOnInit(): void {
+    this.route.queryParams.subscribe(params => {
+      this.orgTitle = params['orgTitle'];
+      this.quizId = params['quizName'];
+    })
+  }
   constructor(private router : Router, private fb: FormBuilder, private firestore: AngularFirestore, private route : ActivatedRoute) {
     this.questionForm = this.fb.group({
       question: ['', Validators.required],
@@ -24,7 +30,7 @@ export class AddQuestionsComponent implements OnInit{
     });
   }
   back(){
-    this.router.navigate(['organisation/quizzes/dashboard'], { queryParams: { orgTitle: this.orgTitle } });
+    this.router.navigate(['organisation/quizzes/dashboard'], { queryParams: { orgTitle: this.orgTitle, quizName : this.quizId } });
   }
   submit() {
     if (this.questionForm.invalid) {
@@ -38,8 +44,8 @@ export class AddQuestionsComponent implements OnInit{
     }
     this.route.queryParams.subscribe(params => {
       const orgTitle = params['orgTitle'];
-      const quizName = params['quizName'];
-      const quizRef = this.firestore.collection('Organisations').doc(orgTitle).collection('Quizzes').doc(quizName);
+      const quizId = params['quizName'];
+      const quizRef = this.firestore.collection('Organisations').doc(orgTitle).collection('Quizzes').doc(quizId);
       quizRef.collection('questions').add(question).then(() => {
         this.questionForm.reset();
       });
