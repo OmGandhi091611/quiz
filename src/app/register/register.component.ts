@@ -10,9 +10,9 @@ export class RegisterComponent implements OnInit{
   email : string = '';
   password : string = '';
   username : string = '';
-  errorMessage! : string;
-  anotherMessage! : string;
-  thirdMessage! : string;
+  // errorMessage! : string;
+  // anotherMessage! : string;
+  // thirdMessage! : string;
   emailErrorMessage!: string;
   passwordErrorMessage!: string;
   constructor(private auth: AuthService) {}

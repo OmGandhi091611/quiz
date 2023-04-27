@@ -14,6 +14,6 @@ export class CreateorgComponent implements OnInit{
   addorg() {
     const orgRef = this.firestore.collection('Organisations').doc(this.organisation);
     orgRef.set({ title: this.organisation });
-    this.router.navigate(['organisation']);
+    this.router.navigate(['organisation/quizzes/createquiz'], {queryParams : {orgTitle : this.organisation}});
   }
 }

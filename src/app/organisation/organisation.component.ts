@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../shared/auth.service';
 import { Router } from '@angular/router';
-import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/compat/firestore';
-import { Observable, of } from 'rxjs';
+import { AngularFirestore } from '@angular/fire/compat/firestore';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-organisation',
@@ -20,7 +20,6 @@ export class OrganisationComponent implements OnInit{
     this.auth.logout();
   }
   selectedOrganisation(org: any) {
-    // console.log(org.title);
     this.router.navigate(['organisation/quizzes'], { queryParams: { orgTitle: org.title } });
   }
   addorganisation() {

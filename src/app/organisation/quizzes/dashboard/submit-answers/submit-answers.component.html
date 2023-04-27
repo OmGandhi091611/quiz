@@ -20,7 +20,7 @@
     <tr *ngFor="let score of scores">
       <td>{{ score.username }}</td>
       <td>{{ score.score }}/{{ score.totalQuestions }} </td>
-      <td><span *ngIf="(score.score * 100) / score.totalQuestions > 50">Pass</span> <span *ngIf="(score.score * 100) / score.totalQuestions < 50">Fail</span> </td>
+      <td><span *ngIf="(score.score * 100) / score.totalQuestions > 50">Pass</span> <span *ngIf="(score.score * 100) / score.totalQuestions <= 50">Fail</span> </td>
     </tr>
   </tbody>
 </table>

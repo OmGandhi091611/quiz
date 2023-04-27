@@ -10,7 +10,6 @@ export class SubmitAnswersComponent  implements OnInit{
   questionNo!: number;
   quizId! : string;
   orgTitle! : string;
-  totalQuestions!: number;
   scores: any[] = [];
   ngOnInit(): void {
     this.route.queryParams.subscribe(params => {
@@ -18,13 +17,13 @@ export class SubmitAnswersComponent  implements OnInit{
       this.quizId = params['quizName']
       this.orgTitle = params['orgTitle'];
     });
-    this.firestore.collection('scores', ref => ref.orderBy('score', 'desc')).valueChanges().subscribe((scores) => {
+    this.firestore.collection(`Organisations/${this.orgTitle}/Quizzes/${this.quizId}/scores`, ref => ref.orderBy('score', 'desc')).valueChanges().subscribe((scores) => {
       this.scores = scores;
     })
   }
   constructor(private router: Router, private route: ActivatedRoute, private firestore : AngularFirestore) {
   }
   goBack() {
-    this.router.navigate(['organisation/quizzes/dashboard'], {queryParams: { questionNo : this.questionNo + 1 , quizName: this.quizId, orgTitle : this.orgTitle}});
+    this.router.navigate(['organisation/quizzes/dashboard'], {queryParams: { quizName: this.quizId, orgTitle : this.orgTitle, questionNo : this.questionNo + 1}});
   }
 }

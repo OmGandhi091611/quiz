@@ -10,9 +10,9 @@ import { Router } from '@angular/router';
 export class UsernameComponent implements OnInit{
   constructor(private fireauth : AngularFireAuth, private router : Router) {}
   username! : string;
-  errorMessage! : string;
-  anotherMessage! : string;
-  thirdMessage! : string;
+  // errorMessage! : string;
+  // anotherMessage! : string;
+  // thirdMessage! : string;
   ngOnInit(): void {}
   updateDisplayName() {
     // const usernameRegex = /^[a-z0-9]+$/;

@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
-import { AuthService } from 'src/app/shared/auth.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 @Component({
@@ -13,8 +12,6 @@ export class DashboardComponent implements OnInit{
   selectedAnswers: string[] = [];
   questionNo : number = 0;
   currentDocument: any;
-  question: any;
-  correctAnswer: any;
   showError = false;
   formSubmitted: boolean[] = [];
   orgTitle: any;
@@ -24,9 +21,9 @@ export class DashboardComponent implements OnInit{
   };
   ngOnInit(): void {
     this.route.queryParams.subscribe(params => {
-      this.questionNo = parseInt(params['questionNo'], 10) - 1 || 0;
       this.quizId = params['quizName'];
       this.orgTitle = params['orgTitle']
+      this.questionNo = parseInt(params['questionNo'], 10) - 1 || 0;
       if (this.quizId) {
         this.firestore.collection(`Organisations/${this.orgTitle}/Quizzes/${this.quizId}/questions`)
         .valueChanges().subscribe((questions: any[]) => {
@@ -38,18 +35,19 @@ export class DashboardComponent implements OnInit{
     });
   };
   nextQuestion() {
-    if (this.selectedAnswers[this.questionNo] === null) {
+    if (!this.selectedAnswers[this.questionNo]) {
+      this.formSubmitted[this.questionNo] = true;
       this.showError = true;
       return;
     }
-    this.formSubmitted[this.questionNo] = true;
     if (this.questionNo < this.mcqDocuments.length - 1) {
       this.questionNo++;
       this.currentDocument = this.mcqDocuments[this.questionNo];
       this.updateUrl();
       this.showError = false;
+    } else {
+      this.submitAnswers();
     }
-    // console.log(`Moving to question ${this.questionNo + 1}`);
   }
   previousQuestion() {
     if(this.questionNo > 0) {
@@ -85,32 +83,39 @@ export class DashboardComponent implements OnInit{
   submitAnswers() {
     let score = 0;
     let unansweredQuestions = [];
-    for(let i = 0; i < this.selectedAnswers.length; i++) {
-      if(this.selectedAnswers[i] === null) {
+    for (let i = 0; i < this.selectedAnswers.length; i++) {
+      if (this.selectedAnswers[i] === null) {
         unansweredQuestions.push(i);
-      } else if(this.mcqDocuments[i].correctAnswer === this.selectedAnswers[i]) {
+      } else if (this.mcqDocuments[i].correctAnswer === this.selectedAnswers[i]) {
         score++;
       }
     }
     const totalQuestions = this.mcqDocuments.length;
-    if(unansweredQuestions.length > 0) {
-      this.questionNo = unansweredQuestions[0];
-      this.currentDocument = this.mcqDocuments[this.questionNo];
-      this.router.navigate(['organisation/quizzes/dashboard'], { queryParams: { questionNo: this.questionNo + 1 , orgTitle : this.orgTitle, quizName : this.quizId }});
-      console.log(this.selectedAnswers);
-    } else {
+    if (!this.selectedAnswers[this.questionNo]) {
+      this.formSubmitted[this.questionNo] = true;
+      this.showError = true;
+      return;
+    }
+    else {
       this.afauth.onAuthStateChanged((user) => {
-        if(user) {
+        if (user) {
           const displayName = user?.displayName;
-          this.firestore.collection('scores').doc(displayName!).set({
-            score : score,
-            username : displayName,
+          this.firestore.collection(`Organisations/${this.orgTitle}/Quizzes/${this.quizId}/scores`).doc(displayName!).set({
+            score: score,
+            username: displayName,
             totalQuestions: totalQuestions,
-            email : user.email,
+            email: user.email,
+            subject : this.quizId,
           })
         }
       });
-      this.router.navigate(['organisation/quizzes/dashboard/submit-answers'], { queryParams: { score: score, totalQuestions: totalQuestions, questionNo: this.questionNo, orgTitle : this.orgTitle, quizName : this.quizId}});
+      this.router.navigate(['organisation/quizzes/dashboard/submit-answers'], {
+        queryParams: {
+          questionNo: this.questionNo,
+          orgTitle: this.orgTitle,
+          quizName: this.quizId
+        }
+      });
     }
-  }
+  };
 }
