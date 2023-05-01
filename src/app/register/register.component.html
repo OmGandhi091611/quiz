@@ -1,4 +1,9 @@
-<mat-toolbar color="primary" class="toolbar-container">Sign Up</mat-toolbar>
+<mat-toolbar color="primary" class="toolbar-container">
+  Sign Up
+  <button mat-icon-button (click)="logout()" class="back-button">
+    <mat-icon matSuffix>arrow_back</mat-icon>
+  </button>
+</mat-toolbar>
 <div class="form-wraper">
   <div class="form-container card">
     <div class="form-body">
@@ -28,7 +33,8 @@
 
     </div>
     <div class="additional-link">
-      Already have an account? <a routerLink="/"> <strong>Sign In</strong></a>
+      Already a Student? <a [routerLink]="['/login']"
+      [queryParams]="{ orgTitle: orgTitle }" > <strong>Sign In</strong></a>
     </div>
   </div>
 </div>

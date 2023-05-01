@@ -11,6 +11,8 @@ export class QuizzesComponent implements OnInit{
   orgTitle: any;
   quizzes!: any[];
   selectedOrg: any;
+  userRole : any;
+  quizId: any;
   constructor(private router : Router, private firestore : AngularFirestore, private route : ActivatedRoute) {};
   ngOnInit(): void {
     this.route.queryParams.subscribe(params => {
@@ -23,14 +25,27 @@ export class QuizzesComponent implements OnInit{
         });
       }
     });
+    this.userRole = localStorage.getItem('userRole')
   };
   logout() {
-    this.router.navigate(['organisation']);
+    localStorage.removeItem('userRole')
+    this.router.navigate(['login'], {queryParams : {orgTitle : this.orgTitle}});
   }
   addQuiz() {
     this.router.navigate(['organisation/quizzes/createquiz'], { queryParams: { orgTitle: this.orgTitle } });
   }
   takeQuiz(quizId: string) {
     this.router.navigate(['organisation/quizzes/dashboard'], { queryParams: { quizName: quizId, orgTitle: this.orgTitle } });
+  }
+  viewscores() {
+    if (this.userRole === "teacher") {
+      this.router.navigate(['organisation/quizzes/dashboard/submit-answers'], {
+        queryParams: {
+          orgTitle: this.orgTitle,
+          quizName: this.quizId,
+          viewScores: true,
+        }
+      });
+    }
   }
 }

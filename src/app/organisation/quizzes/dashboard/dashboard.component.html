@@ -2,7 +2,7 @@
   <button mat-icon-button (click)="logout()" class="back-button">
     <mat-icon matSuffix>arrow_back</mat-icon>
   </button>
-  <button mat-icon-button (click)="onAddQuestions()" class="add-button">
+  <button mat-icon-button *ngIf="userRole === 'teacher' || userRole === 'admin'" (click)="onAddQuestions()" class="add-button">
     <mat-icon matSuffix>add</mat-icon>
   </button>
   Quiz

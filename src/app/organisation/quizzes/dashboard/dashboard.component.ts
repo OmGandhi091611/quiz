@@ -16,7 +16,8 @@ export class DashboardComponent implements OnInit{
   formSubmitted: boolean[] = [];
   orgTitle: any;
   quizId: any;
-  constructor(private afauth : AngularFireAuth, private firestore : AngularFirestore, private router : Router, private route : ActivatedRoute) {
+  userRole: any;
+  constructor(private fireauth : AngularFireAuth, private firestore : AngularFirestore, private router : Router, private route : ActivatedRoute) {
     this.selectedAnswers = Array(this.mcqDocuments.length).fill(null);
   };
   ngOnInit(): void {
@@ -33,9 +34,10 @@ export class DashboardComponent implements OnInit{
         });
       }
     });
+    this.userRole = localStorage.getItem('userRole')
   };
   nextQuestion() {
-    if (!this.selectedAnswers[this.questionNo]) {
+    if (!this.selectedAnswers[this.questionNo] && this.userRole === "student") {
       this.formSubmitted[this.questionNo] = true;
       this.showError = true;
       return;
@@ -91,21 +93,17 @@ export class DashboardComponent implements OnInit{
       }
     }
     const totalQuestions = this.mcqDocuments.length;
-    if (!this.selectedAnswers[this.questionNo]) {
+    if (!this.selectedAnswers[this.questionNo] && this.userRole === "student") {
       this.formSubmitted[this.questionNo] = true;
       this.showError = true;
       return;
     }
-    else {
-      this.afauth.onAuthStateChanged((user) => {
+    else if (this.userRole === "student"){
+      this.fireauth.onAuthStateChanged((user) => {
         if (user) {
-          const displayName = user?.displayName;
-          this.firestore.collection(`Organisations/${this.orgTitle}/Quizzes/${this.quizId}/scores`).doc(displayName!).set({
-            score: score,
-            username: displayName,
-            totalQuestions: totalQuestions,
-            email: user.email,
-            subject : this.quizId,
+          const uid = user.uid;
+          this.firestore.collection('Organisations').doc(this.orgTitle).collection('users').doc(uid).collection('scores').doc(this.quizId).set({
+            [this.quizId] : {score : score}
           })
         }
       });
@@ -114,6 +112,15 @@ export class DashboardComponent implements OnInit{
           questionNo: this.questionNo,
           orgTitle: this.orgTitle,
           quizName: this.quizId
+        }
+      });
+    }
+    else {
+      this.router.navigate(['organisation/quizzes/dashboard/submit-answers'], {
+        queryParams: {
+          questionNo: this.questionNo,
+          orgTitle: this.orgTitle,
+          quizName: this.quizId,
         }
       });
     }

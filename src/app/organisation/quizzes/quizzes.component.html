@@ -2,7 +2,7 @@
   <button mat-icon-button (click)="logout()" class="back-button">
     <mat-icon matSuffix>arrow_back</mat-icon>
   </button>
-  <button mat-icon-button (click)="addQuiz()" class="add-button">
+  <button mat-icon-button *ngIf="userRole === 'teacher' || userRole === 'admin'" (click)="addQuiz()" class="add-button">
     <mat-icon matSuffix>add</mat-icon>
   </button>
   Quiz-List
@@ -18,7 +18,8 @@
           {{ quiz.title }}
         </mat-card-content>
         <mat-card-actions>
-          <button mat-raised-button color="primary" (click)="takeQuiz(quiz.title)">Take this Quiz</button>
+          <button mat-raised-button color="primary" (click)="takeQuiz(quiz.title)" *ngIf="userRole === 'student'">Take this Quiz</button>
+          <button mat-raised-button color="primary" (click)="viewscores()" *ngIf="userRole === 'teacher'">View the scores</button>
         </mat-card-actions>
       </mat-card>
     </div>

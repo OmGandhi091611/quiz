@@ -1,39 +1,58 @@
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { GoogleAuthProvider } from '@angular/fire/auth';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
+  role!: string;
   username : string = '';
-  constructor(private fireauth: AngularFireAuth, private router: Router, private firestore : AngularFirestore) { }
-  login(email : string, password : string) {
-    this.fireauth.signInWithEmailAndPassword(email , password).then( res => {
-      this.router.navigate(['organisation']);
-    }, err => {
-        alert(err.message);
-        this.router.navigate(['']);
+  orgTitle! : string;
+  constructor(private fireauth: AngularFireAuth, private router: Router, private firestore : AngularFirestore, private route : ActivatedRoute) {
+    this.route.queryParams.subscribe(params => {
+      this.orgTitle = params['orgTitle'];
     })
   }
 
   // register method
-  register(email : string, password : string, displayName : string) {
-    this.fireauth.createUserWithEmailAndPassword(email , password).then( async res => {
+  register(email: string, password: string, displayName: string) {
+    this.fireauth.createUserWithEmailAndPassword(email, password).then(async res => {
       const uid = res.user?.uid;
-      const userRef = this.firestore.collection('users').doc(uid);
-      await this.updateProfile(displayName);
-      this.router.navigate(['organisation']);
+      const emailDomain = email.split('@')[1];
+      const domain = this.orgTitle;
+      const lowercaseDomain = typeof domain === 'string' ? domain.toLowerCase().replace(/\s/g, '') : '';
+      if (emailDomain === `${lowercaseDomain}.com`) {
+        this.role = 'admin';
+      } else if (emailDomain === `${lowercaseDomain}.org`) {
+        this.role = 'teacher';
+      } else {
+        this.role = 'student';
+      }
+      if (this.orgTitle) {
+        await this.updateProfile(displayName);
+        const docRef = this.firestore.collection('Organisations').doc(this.orgTitle).collection('users').doc(uid);
+        await docRef.set({
+          email: res.user?.email,
+          name: res.user?.displayName,
+          role: this.role,
+          organisation: this.orgTitle,
+        });
+        localStorage.setItem('userRole', this.role);
+        this.router.navigate(['login'], {queryParams : {orgTitle : this.orgTitle}});
+      } else {
+        console.error('Error: organisation title is undefined');
+      }
     }, err => {
       alert(err.message);
       this.router.navigate(['/register']);
     });
-  }
+  };
   // sign out
   logout() {
     this.fireauth.signOut().then(() => {
-      localStorage.removeItem('token');
+      localStorage.removeItem('userRole');
       this.router.navigate(['']);
     }, err => {
       alert(err.message);
@@ -42,7 +61,7 @@ export class AuthService {
   // forgot password
   forgotPassword(email : string) {
     this.fireauth.sendPasswordResetEmail(email).then(() => {
-      this.router.navigate(['login/verify-email']);
+      this.router.navigate(['login/verify-email'], {queryParams : {orgTitle : this.orgTitle}});
     }, err => {
       alert(err.message);
     })
@@ -61,19 +80,27 @@ export class AuthService {
     provider.setCustomParameters({ prompt: 'select_account' });
     return this.fireauth.signInWithPopup(provider).then(res => {
       const user = res.user;
-      const uid = user?.uid;
       if (user?.photoURL !== "null") {
         user?.updateProfile({
           photoURL : "null",
         }).then(() =>{
-          this.router.navigate(['./login/username']);
+          this.router.navigate(['./login/username'], {queryParams : {orgTitle : this.orgTitle}});
         });
-        console.log(user);
+        // console.log(user);
         return;
-      } else {
-        localStorage.setItem('token', JSON.stringify(uid));
-        this.router.navigate(['organisation']);
-        console.log(user);
+      }
+      else {
+        const userPromise = this.fireauth.currentUser;
+          userPromise.then((user) => {
+            const uid = user?.uid
+            const ref = this.firestore.collection('Organisations').doc(this.orgTitle).collection('users').doc(uid);
+            ref.get().subscribe((userDoc) => {
+            const role = userDoc.data()?.['role'];
+            localStorage.setItem('userRole', role);
+            this.router.navigate(['organisation/quizzes'], {queryParams : {orgTitle : this.orgTitle}});
+          });
+        });
+        // console.log(user);
       }
     });
   };

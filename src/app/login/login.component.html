@@ -1,10 +1,15 @@
-<mat-toolbar color="primary" class="toolbar-container">Sign In</mat-toolbar>
+<mat-toolbar color="primary" class="toolbar-container">
+  Sign In
+  <button mat-icon-button (click)="logout()" class="back-button">
+    <mat-icon matSuffix>arrow_back</mat-icon>
+  </button>
+</mat-toolbar>
 <div class="form-wraper">
   <div class="form-container card">
     <div class="form-body">
       <mat-form-field class="justifier">
           <mat-label>Email</mat-label>
-          <input matInput type="email" class="form-input" [(ngModel)]="email" (ngModelChange)="emailErrorMessage = ''">
+          <input matInput type="email" class="form-input" [(ngModel)]="email" id="email-field" (ngModelChange)="emailErrorMessage = ''">
       </mat-form-field>
     <div class="error-message" *ngIf="emailErrorMessage && !email"> {{emailErrorMessage}} </div>
       <mat-form-field class="justifier">
@@ -15,9 +20,10 @@
           </button>
       </mat-form-field>
     <div class="error-message" *ngIf="passwordErrorMessage && !password"> {{passwordErrorMessage}} </div>
+    <div class="error-message" *ngIf="errorMessage"> {{errorMessage}} </div>
     </div>
     <div class="form-footer">
-        <button mat-raised-button class="btn custom-btn" (click)="login()" color="primary">
+        <button mat-raised-button class="btn custom-btn" (click)="login(email, password)" color="primary">
             <mat-icon>input</mat-icon> <strong> Sign In</strong>
         </button>
         <div class="txt">
@@ -28,12 +34,13 @@
         </button>
     </div>
     <div class="additional-link">
-      Don't have an Account? <a routerLink="/register"> <strong>Create an account</strong></a>
-    </div>
-    <br/>
-    <div class="additional-link">
-      Forgot Password?<a routerLink="login/forgot-password"> <strong> Reset the Password</strong></a>
+      Forgot Password?<a [routerLink]="['/login/forgot-password']"
+      [queryParams]="{ orgTitle: orgTitle }"> <strong> Reset the Password</strong></a>
     </div>
   </div>
 </div>
-
+<div class="additional-link">
+  <button mat-raised-button color="primary" class="admissions"
+  [routerLink]="['/register']"
+  [queryParams]="{ orgTitle: orgTitle }"> <strong>New Admissions</strong></button>
+</div>

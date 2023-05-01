@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../shared/auth.service';
+import { ActivatedRoute } from '@angular/router';
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
@@ -15,8 +16,13 @@ export class RegisterComponent implements OnInit{
   // thirdMessage! : string;
   emailErrorMessage!: string;
   passwordErrorMessage!: string;
-  constructor(private auth: AuthService) {}
-  ngOnInit(): void {}
+  orgTitle: any;
+  constructor(private auth: AuthService, private route : ActivatedRoute) {}
+  ngOnInit(): void {
+    this.route.queryParams.subscribe(params => {
+      this.orgTitle = params['orgTitle'];
+    })
+  }
   register() {
     // const usernameRegex = /^[a-z0-9]+$/;
     // if (!usernameRegex.test(this.username)) {
@@ -37,5 +43,8 @@ export class RegisterComponent implements OnInit{
     this.email = '';
     this.password = '';
     this.username = '';
+  }
+  logout() {
+    this.auth.logout();
   }
 }

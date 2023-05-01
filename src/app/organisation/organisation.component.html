@@ -1,11 +1,8 @@
 <mat-toolbar color="primary" class="toolbar-container">
-  <button mat-icon-button (click)="logout()" class="back-button">
-    <mat-icon matSuffix>arrow_back</mat-icon>
-  </button>
-  <button mat-icon-button (click)="addorganisation()" class="add-button">
+  Organisations
+  <button mat-icon-button (click)="addorganisation()"  *ngIf= "userRole === 'superAdmin'" class="add-button">
     <mat-icon matSuffix>add</mat-icon>
   </button>
-  Organisations
 </mat-toolbar>
 <div class="form-wraper">
   <div class="form-container card">

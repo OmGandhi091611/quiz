@@ -4,24 +4,41 @@
   </button>
   Score
 </mat-toolbar>
-<div class="box">
-<h1>LeaderBoard</h1>
+<div class="box" *ngIf="this.userRole === 'student'">
+  <h1> {{name}} </h1>
 </div>
-<div class="table-container">
-<table>
-  <thead>
-    <tr>
-      <th>Username</th>
-      <th>Score</th>
-      <th>Grade</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let score of scores">
-      <td>{{ score.username }}</td>
-      <td>{{ score.score }}/{{ score.totalQuestions }} </td>
-      <td><span *ngIf="(score.score * 100) / score.totalQuestions > 50">Pass</span> <span *ngIf="(score.score * 100) / score.totalQuestions <= 50">Fail</span> </td>
-    </tr>
-  </tbody>
-</table>
+<div class="table-container" *ngIf="this.userRole === 'student'">
+  <table>
+    <thead>
+      <tr>
+        <th>Subject</th>
+        <th>Score</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let quizScore of quizScores">
+        <td>{{ quizScore.name }}</td>
+        <td>{{ quizScore.score }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<div class="box" *ngIf="this.userRole === 'teacher'">
+  <h1>{{this.quizId}} scores</h1>
+</div>
+<div class="table-container" *ngIf="this.userRole === 'teacher'">
+  <table>
+    <thead>
+      <tr>
+        <th>Student Name</th>
+        <th>Score</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let quizScore of quizScores">
+        <td>{{ quizScore.name }}</td>
+        <td>{{ quizScore.score }}</td>
+      </tr>
+    </tbody>
+  </table>
 </div>

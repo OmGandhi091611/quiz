@@ -2,12 +2,12 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 const routes: Routes = [
-  { path: '', loadChildren: () => import('./login/login.module').then(m => m.LoginModule) },
+  { path: '', loadChildren: () => import('./organisation/organisation.module').then(m => m.OrganisationModule) },
+  { path: 'login', loadChildren: () => import('./login/login.module').then(m => m.LoginModule) },
   { path: 'register', loadChildren: () => import('./register/register.module').then(m => m.RegisterModule) },
   { path: 'login/forgot-password', loadChildren: () => import('./login/forgot-password/forgot-password.module').then(m => m.ForgotPasswordModule) },
   { path: 'login/verify-email', loadChildren: () => import('./login/verify-email/verify-email.module').then(m => m.VerifyEmailModule) },
   { path: 'login/username', loadChildren: () => import('./login/username/username.module').then(m => m.UsernameModule) },
-  { path: 'organisation', loadChildren: () => import('./organisation/organisation.module').then(m => m.OrganisationModule) },
   { path: 'organisation/quizzes', loadChildren: () => import('./organisation/quizzes/quizzes.module').then(m => m.QuizzesModule) },
   { path: 'organisation/createorg', loadChildren: () => import('./organisation/createorg/createorg.module').then(m => m.CreateorgModule) },
   { path: 'organisation/quizzes/createquiz', loadChildren: () => import('./organisation/quizzes/createquiz/createquiz.module').then(m => m.CreatequizModule) },

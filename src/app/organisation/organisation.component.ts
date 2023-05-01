@@ -12,15 +12,17 @@ import { Observable } from 'rxjs';
 export class OrganisationComponent implements OnInit{
   items!: Observable<any[]>;
   selectedOrg: any;
+  userRole: any;
   constructor(private auth : AuthService, private router : Router, private firestore : AngularFirestore) {};
   ngOnInit(): void {
    this.items = this.firestore.collection('Organisations').valueChanges();
+   this.userRole = localStorage.getItem('userRole');
   };
   logout() {
     this.auth.logout();
   }
   selectedOrganisation(org: any) {
-    this.router.navigate(['organisation/quizzes'], { queryParams: { orgTitle: org.title } });
+    this.router.navigate(['login'], {queryParams : {orgTitle : org.title}});
   }
   addorganisation() {
     this.router.navigate(['organisation/createorg']);

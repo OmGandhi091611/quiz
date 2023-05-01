@@ -70,13 +70,13 @@ body{
 .mirror{
   transform: scaleX(-1);
 }
-.back-button{
-  position: absolute;
-  left: 5px;
-}
 .add-button{
   position: absolute;
   right: 0;
+}
+.back-button{
+  position: absolute;
+  left: 5px;
 }
 /** form footer **/
 .form-footer{

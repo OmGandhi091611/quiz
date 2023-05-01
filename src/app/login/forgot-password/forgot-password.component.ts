@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { AuthService } from 'src/app/shared/auth.service';
 @Component({
   selector: 'app-forgot-password',
@@ -7,8 +8,13 @@ import { AuthService } from 'src/app/shared/auth.service';
 })
 export class ForgotPasswordComponent implements OnInit{
   email : string = '';
-  constructor(private auth: AuthService) {}
-  ngOnInit(): void {}
+  orgTitle: any;
+  constructor(private auth: AuthService, private route : ActivatedRoute) {}
+  ngOnInit(): void {
+    this.route.queryParams.subscribe(params => {
+      this.orgTitle = params['orgTitle'];
+    })
+  }
   forgotpassword() {
     this.auth.forgotPassword(this.email);
     this.email = '';
