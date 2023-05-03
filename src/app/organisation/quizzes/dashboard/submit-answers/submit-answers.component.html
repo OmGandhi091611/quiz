@@ -4,25 +4,23 @@
   </button>
   Score
 </mat-toolbar>
-<div class="box" *ngIf="this.userRole === 'student'">
-  <h1> {{name}} </h1>
+<div class="box" *ngIf="userRole === 'student'">
+  <h1>{{name}} </h1>
 </div>
-<div class="table-container" *ngIf="this.userRole === 'student'">
-  <table>
-    <thead>
-      <tr>
-        <th>Subject</th>
-        <th>Score</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let quizScore of quizScores">
-        <td>{{ quizScore.name }}</td>
-        <td>{{ quizScore.score }}</td>
-      </tr>
-    </tbody>
-  </table>
-</div>
+<table *ngIf="userRole === 'student'">
+  <thead>
+    <tr>
+      <th>Subject</th>
+      <th>Score</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let quizScore of quizScores">
+      <td>{{ quizScore.name }}</td>
+      <td>{{ quizScore.score }}</td>
+    </tr>
+  </tbody>
+</table>
 <div class="box" *ngIf="this.userRole === 'teacher'">
   <h1>{{this.quizId}} scores</h1>
 </div>
@@ -35,9 +33,9 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let quizScore of quizScores">
-        <td>{{ quizScore.name }}</td>
-        <td>{{ quizScore.score }}</td>
+      <tr *ngFor="let score of scores">
+        <td>{{ score.name }}</td>
+        <td>{{ score.score }}</td>
       </tr>
     </tbody>
   </table>

@@ -19,7 +19,7 @@
         </mat-card-content>
         <mat-card-actions>
           <button mat-raised-button color="primary" (click)="takeQuiz(quiz.title)" *ngIf="userRole === 'student'">Take this Quiz</button>
-          <button mat-raised-button color="primary" (click)="viewscores()" *ngIf="userRole === 'teacher'">View the scores</button>
+          <button mat-raised-button color="primary" (click)="viewscores(quiz.title)" *ngIf="userRole === 'teacher'">View the Quizzes</button>
         </mat-card-actions>
       </mat-card>
     </div>

@@ -16,49 +16,47 @@ export class SubmitAnswersComponent  implements OnInit{
   totalQuestions: any;
   name! : string;
   quizScores: { name: string, score: number }[] = [];
-  viewScores!: boolean;
+  // viewScores!: boolean;
   userRole: any;
+  score: any;
+  role: any;
   ngOnInit(): void {
     this.userRole = localStorage.getItem('userRole')
     this.route.queryParams.subscribe(params => {
       this.questionNo = parseInt(params['questionNo']);
       this.quizId = params['quizName'];
       this.orgTitle = params['orgTitle'];
-      this.viewScores = params['viewScores'] === 'true';
     });
+
     this.fireauth.authState.subscribe(user => {
-      if (user && this.userRole === 'student') {
+      const userRole = localStorage.getItem('userRole');
+      if (user && userRole === 'student') {
         const uid = user.uid;
-        this.firestore.collection(`Organisations/${this.orgTitle}/users`).doc(uid).valueChanges(['name'])
+        const displayName = user.displayName;
+        this.firestore.collection(`Organisations/${this.orgTitle}/users`).doc(uid).valueChanges(['name', 'role'])
           .subscribe((userData: any) => {
             this.name = userData.name;
+            this.role = userData.role;
           });
-        this.firestore.collection(`Organisations/${this.orgTitle}/users/${uid}/scores`).valueChanges()
+        this.firestore.collection('Organisations').doc(this.orgTitle).collection('users').doc(uid).collection('scores').doc(displayName!).valueChanges()
           .subscribe((scoresData: any) => {
-            this.quizScores = [];
-            for (let i = 0; i < scoresData.length; i++) {
-              const quizId = Object.keys(scoresData[i])[0];
-              const score = scoresData[i][quizId].score;
-              this.quizScores.push({ name: quizId, score: score });
+            // console.log(scoresData);
+            if (Array.isArray(scoresData)) {
+              this.quizScores = [];
+              scoresData.forEach((scoreData: any) => {
+                const quizId = Object.keys(scoreData)[0];
+                const score = scoreData[quizId].score;
+                this.quizScores.push({ name: quizId, score: score });
+              });
             }
           });
       }
-      else if (user && this.userRole === 'teacher') {
-        this.firestore.collection(`Organisations/${this.orgTitle}/users/scores`).valueChanges()
-          .subscribe((scoresData: any) => {
-            console.log(scoresData);
-            this.quizScores = [];
-            for (let i = 0; i < scoresData.length; i++) {
-              const uid = Object.keys(scoresData[i])[0];
-              const score = scoresData[i][uid].score;
-              this.firestore.collection(`Organisations/${this.orgTitle}/users`).doc(uid).valueChanges(['name'])
-                .subscribe((userData: any) => {
-                  const name = userData.name;
-                  this.quizScores.push({ name: name, score: score });
-                });
-            }
-          });
-        }
+      else if (user && userRole === 'teacher') {
+        this.firestore.collection(`Organisations/${this.orgTitle}/Quizzes/${this.quizId}/scores`)
+        .valueChanges().subscribe((scores: any[]) => {
+          this.scores = scores;
+        });
+      };
     });
   }
   constructor(private router: Router, private route: ActivatedRoute, private firestore : AngularFirestore, private fireauth : AngularFireAuth) {}

@@ -85,6 +85,11 @@ export class DashboardComponent implements OnInit{
   submitAnswers() {
     let score = 0;
     let unansweredQuestions = [];
+    const userRole = localStorage.getItem('userRole');
+    if (userRole !== "student") {
+      console.log("User is not a student. Data will not be stored in Firebase.");
+      return;
+    }
     for (let i = 0; i < this.selectedAnswers.length; i++) {
       if (this.selectedAnswers[i] === null) {
         unansweredQuestions.push(i);
@@ -92,37 +97,36 @@ export class DashboardComponent implements OnInit{
         score++;
       }
     }
-    const totalQuestions = this.mcqDocuments.length;
-    if (!this.selectedAnswers[this.questionNo] && this.userRole === "student") {
+    if(!this.selectedAnswers[this.questionNo]){
       this.formSubmitted[this.questionNo] = true;
       this.showError = true;
       return;
     }
-    else if (this.userRole === "student"){
-      this.fireauth.onAuthStateChanged((user) => {
-        if (user) {
-          const uid = user.uid;
-          this.firestore.collection('Organisations').doc(this.orgTitle).collection('users').doc(uid).collection('scores').doc(this.quizId).set({
-            [this.quizId] : {score : score}
-          })
-        }
-      });
-      this.router.navigate(['organisation/quizzes/dashboard/submit-answers'], {
-        queryParams: {
-          questionNo: this.questionNo,
-          orgTitle: this.orgTitle,
-          quizName: this.quizId
-        }
-      });
-    }
-    else {
-      this.router.navigate(['organisation/quizzes/dashboard/submit-answers'], {
-        queryParams: {
-          questionNo: this.questionNo,
-          orgTitle: this.orgTitle,
-          quizName: this.quizId,
-        }
-      });
-    }
+    this.fireauth.onAuthStateChanged((user) => {
+      const uid = user?.uid;
+      const userRef = this.firestore.collection('Organisations').doc(this.orgTitle).collection('users').doc(uid);
+        userRef.get().subscribe((userDoc) => {
+          const role = userDoc.data()?.['role'];
+          if(role === 'student') {
+            this.firestore.collection('Organisations').doc(this.orgTitle).collection('Quizzes').doc(this.quizId).collection('scores').doc(uid).set({
+              email : user?.email,
+              role : userRole,
+              name : user?.displayName,
+              score : score,
+              subject : this.quizId,
+            });
+          }
+        });
+    });
+    this.router.navigate(['organisation/quizzes/dashboard/submit-answers'], {
+      queryParams: {
+        questionNo: this.questionNo,
+        orgTitle: this.orgTitle,
+        quizName: this.quizId
+      }
+    });
   };
+  viewscores() {
+      this.router.navigate(['organisation/quizzes/dashboard/submit-answers'], {queryParams: { questionNo: this.questionNo, orgTitle: this.orgTitle, quizName: this.quizId,} });
+  }
 }

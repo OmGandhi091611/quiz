@@ -86,7 +86,6 @@ export class AuthService {
         }).then(() =>{
           this.router.navigate(['./login/username'], {queryParams : {orgTitle : this.orgTitle}});
         });
-        // console.log(user);
         return;
       }
       else {
@@ -100,7 +99,6 @@ export class AuthService {
             this.router.navigate(['organisation/quizzes'], {queryParams : {orgTitle : this.orgTitle}});
           });
         });
-        // console.log(user);
       }
     });
   };

@@ -13,19 +13,19 @@ export class QuizzesComponent implements OnInit{
   selectedOrg: any;
   userRole : any;
   quizId: any;
-  constructor(private router : Router, private firestore : AngularFirestore, private route : ActivatedRoute) {};
+  constructor(private router : Router, private firestore : AngularFirestore, private route : ActivatedRoute) {
+    this.userRole = localStorage.getItem('userRole')
+  };
   ngOnInit(): void {
     this.route.queryParams.subscribe(params => {
       this.orgTitle = params['orgTitle'];
       if (this.orgTitle) {
         this.firestore.collection(`Organisations/${this.orgTitle}/Quizzes`).valueChanges()
         .subscribe((quizzes: any[]) => {
-          // console.log(quizzes);
           this.quizzes = quizzes;
         });
       }
     });
-    this.userRole = localStorage.getItem('userRole')
   };
   logout() {
     localStorage.removeItem('userRole')
@@ -37,15 +37,7 @@ export class QuizzesComponent implements OnInit{
   takeQuiz(quizId: string) {
     this.router.navigate(['organisation/quizzes/dashboard'], { queryParams: { quizName: quizId, orgTitle: this.orgTitle } });
   }
-  viewscores() {
-    if (this.userRole === "teacher") {
-      this.router.navigate(['organisation/quizzes/dashboard/submit-answers'], {
-        queryParams: {
-          orgTitle: this.orgTitle,
-          quizName: this.quizId,
-          viewScores: true,
-        }
-      });
-    }
+  viewscores(quizId: string) {
+      this.router.navigate(['organisation/quizzes/dashboard'], {queryParams: { orgTitle: this.orgTitle, quizName: quizId} });
   }
 }

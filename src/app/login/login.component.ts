@@ -24,36 +24,24 @@ export class LoginComponent implements OnInit{
       this.orgTitle = params['orgTitle'];
     })
   }
-  login(email : string, password : string) {
+  login(email: string, password: string) {
     this.fireauth.signInWithEmailAndPassword(email, password)
-    .then((res) => {
-      const uid = res.user?.uid;
-      const userRef = this.firestore.collection('Organisations').doc(this.orgTitle).collection('users').doc(uid);
-      userRef.get().subscribe((userDoc) => {
-        const role = userDoc.data()?.['role'];
-        const org = userDoc.data()?.['organisation'];
-        localStorage.setItem('userRole', role);
-        if (role === 'admin' && org === this.orgTitle) {
-          this.router.navigate(['organisation/quizzes'], { queryParams: { orgTitle: this.orgTitle } });
-        }
-        else if (role === 'teacher' && org === this.orgTitle) {
-          this.router.navigate(['organisation/quizzes'], { queryParams: { orgTitle: this.orgTitle } });
-        }
-        else if (role === 'student' && org === this.orgTitle) {
-          this.router.navigate(['organisation/quizzes'], { queryParams: { orgTitle: this.orgTitle } });
-        }
-        else {
-          this.errorMessage = "* User not found";
-        }
-        this.email = '';
-        this.password = '';
-        const emailField = document.getElementById('email-field') as HTMLInputElement;
-        emailField.focus();
+      .then((res) => {
+        const uid = res.user?.uid;
+        const userRef = this.firestore.collection('Organisations').doc(this.orgTitle).collection('users').doc(uid);
+        userRef.get().subscribe((userDoc) => {
+          const role = userDoc.data()?.['role'];
+            this.router.navigate(['organisation/quizzes'], { queryParams: { orgTitle: this.orgTitle } });
+            localStorage.setItem('userRole', role);
+            this.email = '';
+            this.password = '';
+            const emailField = document.getElementById('email-field') as HTMLInputElement;
+            emailField.focus();
+        });
+      }, (err) => {
+        alert(err.message);
+        this.router.navigate(['login']);
       });
-    }, (err) => {
-      alert(err.message);
-      this.router.navigate(['login']);
-    });
   }
   signInWithGoogle() {
     this.auth.googleSignIn();

@@ -27,8 +27,11 @@
         <button mat-raised-button class="next" (click)="nextQuestion()" [disabled]="isLast()" (focus)="formSubmitted[questionNo] = true">
           <mat-icon matSuffix>play_arrow</mat-icon>
         </button>
-          <button mat-raised-button class="submitAnswer" (click)="submitAnswers()" color="primary" *ngIf="questionNo === mcqDocuments.length - 1">
+          <button mat-raised-button class="submitAnswer" (click)="submitAnswers()" color="primary" *ngIf="questionNo === mcqDocuments.length - 1 && userRole === 'student'">
             <mat-label>Submit</mat-label>
+          </button>
+          <button mat-raised-button class="submitAnswer" (click)="viewscores()" color="primary" *ngIf="userRole === 'teacher'">
+            <mat-label>View the Results</mat-label>
           </button>
       <div class="form-footer">
       </div>
