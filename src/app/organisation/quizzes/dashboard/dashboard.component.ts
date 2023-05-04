@@ -85,6 +85,7 @@ export class DashboardComponent implements OnInit{
   submitAnswers() {
     let score = 0;
     let unansweredQuestions = [];
+    const totalQuestions = this.mcqDocuments.length;
     const userRole = localStorage.getItem('userRole');
     for (let i = 0; i < this.selectedAnswers.length; i++) {
       if (this.selectedAnswers[i] === null) {
@@ -110,6 +111,11 @@ export class DashboardComponent implements OnInit{
               name : user?.displayName,
               score : score,
               subject : this.quizId,
+            });
+            this.firestore.collection('Organisations').doc(this.orgTitle).collection('users').doc(uid).collection('scores').doc(this.quizId).set({
+              score : score,
+              subject : this.quizId,
+              totalQuestions : totalQuestions
             });
           }
         });

@@ -31,29 +31,16 @@ export class SubmitAnswersComponent  implements OnInit{
     this.fireauth.authState.subscribe(user => {
       const userRole = localStorage.getItem('userRole');
       if (user && userRole === 'student') {
-        const uid = user.uid;
-        const displayName = user.displayName;
-        this.firestore.collection(`Organisations/${this.orgTitle}/users`).doc(uid).valueChanges(['name', 'role'])
-          .subscribe((userData: any) => {
-            this.name = userData.name;
-            this.role = userData.role;
-          });
-        this.firestore.collection('Organisations').doc(this.orgTitle).collection('users').doc(uid).collection('scores').doc(displayName!).valueChanges()
-          .subscribe((scoresData: any) => {
-            // console.log(scoresData);
-            if (Array.isArray(scoresData)) {
-              this.quizScores = [];
-              scoresData.forEach((scoreData: any) => {
-                const quizId = Object.keys(scoreData)[0];
-                const score = scoreData[quizId].score;
-                this.quizScores.push({ name: quizId, score: score });
-              });
-            }
-          });
+        const uid = user?.uid;
+        this.firestore.collection(`/Organisations/${this.orgTitle}/users/${uid}/scores`).valueChanges().subscribe((scores: any[]) => {
+          this.scores = scores;
+        });
+        this.firestore.doc(`/Organisations/${this.orgTitle}/users/${uid}`).valueChanges().subscribe((user: any) => {
+          this.name = user?.name;
+        })
       }
       else if (user && userRole === 'teacher') {
-        this.firestore.collection(`Organisations/${this.orgTitle}/Quizzes/${this.quizId}/scores`)
-        .valueChanges().subscribe((scores: any[]) => {
+        this.firestore.collection(`Organisations/${this.orgTitle}/Quizzes/${this.quizId}/scores`).valueChanges().subscribe((scores: any[]) => {
           this.scores = scores;
         });
       };

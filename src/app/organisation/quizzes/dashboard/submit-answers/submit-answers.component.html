@@ -5,19 +5,21 @@
   Score
 </mat-toolbar>
 <div class="box" *ngIf="userRole === 'student'">
-  <h1>{{name}} </h1>
+  <h1> {{name}} </h1>
 </div>
 <table *ngIf="userRole === 'student'">
   <thead>
     <tr>
       <th>Subject</th>
       <th>Score</th>
+      <th>Out Of</th>
     </tr>
   </thead>
   <tbody>
-    <tr *ngFor="let quizScore of quizScores">
-      <td>{{ quizScore.name }}</td>
+    <tr *ngFor="let quizScore of scores">
+      <td>{{ quizScore.subject }}</td>
       <td>{{ quizScore.score }}</td>
+      <td>{{ quizScore.totalQuestions }}</td>
     </tr>
   </tbody>
 </table>
