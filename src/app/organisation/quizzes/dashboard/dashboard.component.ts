@@ -86,10 +86,6 @@ export class DashboardComponent implements OnInit{
     let score = 0;
     let unansweredQuestions = [];
     const userRole = localStorage.getItem('userRole');
-    if (userRole !== "student") {
-      console.log("User is not a student. Data will not be stored in Firebase.");
-      return;
-    }
     for (let i = 0; i < this.selectedAnswers.length; i++) {
       if (this.selectedAnswers[i] === null) {
         unansweredQuestions.push(i);
