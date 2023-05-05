@@ -22,21 +22,34 @@ export class LoginComponent implements OnInit{
   ngOnInit(): void {
     this.route.queryParams.subscribe(params => {
       this.orgTitle = params['orgTitle'];
-    })
+    });
   }
   login(email: string, password: string) {
     this.fireauth.signInWithEmailAndPassword(email, password)
       .then((res) => {
         const uid = res.user?.uid;
         const userRef = this.firestore.collection('Organisations').doc(this.orgTitle).collection('users').doc(uid);
-        userRef.get().subscribe((userDoc) => {
+        userRef.get().subscribe(async (userDoc) => {
           const role = userDoc.data()?.['role'];
+          const orgTitle = userDoc.data()?.['organisation'];
+          const currentuser = await this.fireauth.currentUser;
+          if(orgTitle) {
+            if (currentuser) {
             this.router.navigate(['organisation/quizzes'], { queryParams: { orgTitle: this.orgTitle } });
             localStorage.setItem('userRole', role);
-            this.email = '';
-            this.password = '';
+          } else {
+            this.errorMessage = '* User not found.';
             const emailField = document.getElementById('email-field') as HTMLInputElement;
             emailField.focus();
+          }
+            }
+            else {
+              this.errorMessage = '* User not found.';
+              const emailField = document.getElementById('email-field') as HTMLInputElement;
+              emailField.focus();
+            }
+            this.email = '';
+            this.password = '';
         });
       }, (err) => {
         alert(err.message);

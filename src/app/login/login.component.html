@@ -42,5 +42,5 @@
 <div class="additional-link">
   <button mat-raised-button color="primary" class="admissions"
   [routerLink]="['/register']"
-  [queryParams]="{ orgTitle: orgTitle }"> <strong>New Admissions</strong></button>
+  [queryParams]="{ orgTitle: orgTitle }" *ngIf="userRole === 'admin'"> <strong>New Admissions</strong></button>
 </div>

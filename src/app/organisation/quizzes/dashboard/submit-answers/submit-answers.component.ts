@@ -48,6 +48,12 @@ export class SubmitAnswersComponent  implements OnInit{
   }
   constructor(private router: Router, private route: ActivatedRoute, private firestore : AngularFirestore, private fireauth : AngularFireAuth) {}
   goBack() {
-    this.router.navigate(['organisation/quizzes/dashboard'], {queryParams: { quizName: this.quizId, orgTitle : this.orgTitle, questionNo : this.questionNo + 1}});
+    const userRole = localStorage.getItem('userRole');
+    if(userRole === 'teacher' || userRole === 'admin') {
+      this.router.navigate(['organisation/quizzes/dashboard'], {queryParams: { quizName: this.quizId, orgTitle : this.orgTitle, questionNo : this.questionNo + 1}});
+    }
+    else {
+      this.router.navigate(['organisation/quizzes'], {queryParams: {quizName : this.quizId, orgTitle: this.orgTitle} });
+    }
   }
 }
