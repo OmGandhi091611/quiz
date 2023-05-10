@@ -1,5 +1,5 @@
 <mat-toolbar color="primary" class="toolbar-container">
-  Sign Up
+  Admin Dashboard
   <button mat-icon-button (click)="logout()" class="back-button">
     <mat-icon matSuffix>arrow_back</mat-icon>
   </button>
@@ -11,11 +11,12 @@
           <mat-label>Email</mat-label>
           <input matInput type="email" class="form-input" [(ngModel)]="email">
       </mat-form-field>
-    <!-- <div class="error-message" *ngIf="emailErrorMessage && !email"> {{emailErrorMessage}} </div> -->
+    <div class="error-message" *ngIf="emailErrorMessage && !email"> {{emailErrorMessage}} </div>
       <mat-form-field class="justifier">
         <mat-label>Full Name</mat-label>
         <input matInput type="text" class="form-input" [(ngModel)]="username">
     </mat-form-field>
+    <!-- <div class="error-message" *ngIf="emailErrorMessage && !email"> {{emailErrorMessage}} </div> -->
       <mat-form-field class="justifier">
           <mat-label>Password</mat-label>
           <input matInput [type]="hide ? 'password' : 'text'" class="form-input" [(ngModel)]="password">
@@ -23,18 +24,15 @@
             <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
           </button>
       </mat-form-field>
-    <!-- <div class="error-message" *ngIf="passwordErrorMessage && !password"> {{passwordErrorMessage}} </div> -->
+    <div class="error-message" *ngIf="passwordErrorMessage && !password"> {{passwordErrorMessage}} </div>
     </div>
-
     <div class="form-footer">
         <button mat-raised-button class="btn custom-btn" (click)="register()" color="primary">
             <mat-icon>input</mat-icon><strong> Sign Up</strong>
         </button>
-
-    </div>
-    <div class="additional-link">
-      Already a Student? <a [routerLink]="['/login']"
-      [queryParams]="{ orgTitle: orgTitle }" > <strong>Sign In</strong></a>
+        <button mat-raised-button class="btn custom-btn" (click)="dashboard()" color="primary">
+          <mat-icon>input</mat-icon><strong>Go to Dashboard</strong>
+      </button>
     </div>
   </div>
 </div>

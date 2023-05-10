@@ -29,7 +29,7 @@
         <div class="txt">
           OR
         </div>
-        <button mat-raised-button class="btn" (click)="signInWithGoogle()">
+        <button mat-raised-button class="btn" (click)="googleSignIn()">
           <img src="../../../assets/icons8-google-48.png" alt="" class="google-icon" height="24px" width="24px"> <strong>  Sign In With Google</strong>
         </button>
     </div>
@@ -38,9 +38,4 @@
       [queryParams]="{ orgTitle: orgTitle }"> <strong> Reset the Password</strong></a>
     </div>
   </div>
-</div>
-<div class="additional-link">
-  <button mat-raised-button color="primary" class="admissions"
-  [routerLink]="['/register']"
-  [queryParams]="{ orgTitle: orgTitle }"> <strong>New Admissions</strong></button>
 </div>

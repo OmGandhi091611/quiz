@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../shared/auth.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
@@ -17,7 +17,7 @@ export class RegisterComponent implements OnInit{
   emailErrorMessage!: string;
   passwordErrorMessage!: string;
   orgTitle: any;
-  constructor(private auth: AuthService, private route : ActivatedRoute) {}
+  constructor(private auth: AuthService, private route : ActivatedRoute, private router : Router) {}
   ngOnInit(): void {
     this.route.queryParams.subscribe(params => {
       this.orgTitle = params['orgTitle'];
@@ -45,6 +45,12 @@ export class RegisterComponent implements OnInit{
     this.username = '';
   }
   logout() {
-    this.auth.logout();
+    this.router.navigate(['login'], {queryParams : {orgTitle : this.orgTitle}});
+  }
+  dashboard() {
+    const userRole = localStorage.getItem('userRole');
+    if(userRole === 'admin') {
+      this.router.navigate(['register/admin-dashboard'], {queryParams : {orgTitle : this.orgTitle}});
+    }
   }
 }

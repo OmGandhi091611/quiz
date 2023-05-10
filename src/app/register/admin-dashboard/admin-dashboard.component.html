@@ -1,0 +1,41 @@
+<!-- <mat-toolbar color="primary" class="toolbar-container">
+  Admin Dashboard
+  <button mat-icon-button class="back-button">
+    <mat-icon matSuffix>arrow_back</mat-icon>
+  </button>
+</mat-toolbar>
+<div class="form-wraper">
+  <div class="form-container card">
+    <div class="form-body">
+
+    </div>
+    <div class="form-footer">
+    </div>
+  </div>
+</div> -->
+
+<mat-toolbar color="primary" class="toolbar-container">
+  Admin Dashboard
+  <button mat-icon-button class="back-button" (click)="logout()">
+    <mat-icon matSuffix>arrow_back</mat-icon>
+  </button>
+</mat-toolbar>
+<mat-progress-spinner class="spinner" mode="determinate" *ngIf="loading"></mat-progress-spinner>
+<div class="form-wraper">
+  <div class="form-container card">
+    <div class="form-body">
+      <div class="counter-container">
+        <div class="counter-item">
+          <h2>{{ numStudents }}</h2>
+          <p>Students</p>
+        </div>
+        <div class="counter-item">
+          <h2>{{ numTeachers }}</h2>
+          <p>Teachers</p>
+        </div>
+      </div>
+    </div>
+    <div class="form-footer">
+    </div>
+  </div>
+</div>

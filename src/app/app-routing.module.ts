@@ -14,6 +14,7 @@ const routes: Routes = [
   { path: 'organisation/quizzes/dashboard', loadChildren: () => import('./organisation/quizzes/dashboard/dashboard.module').then(m => m.DashboardModule) },
   { path: 'organisation/quizzes/dashboard/add-questions', loadChildren: () => import('./organisation/quizzes/dashboard/add-questions/add-questions.module').then(m => m.AddQuestionsModule) },
   { path: 'organisation/quizzes/dashboard/submit-answers', loadChildren: () => import('./organisation/quizzes/dashboard/submit-answers/submit-answers.module').then(m => m.SubmitAnswersModule) },
+  { path: 'register/admin-dashboard', loadChildren: () => import('./register/admin-dashboard/admin-dashboard.module').then(m => m.AdminDashboardModule) },
 ];
 
 @NgModule({

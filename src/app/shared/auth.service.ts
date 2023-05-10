@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { ActivatedRoute, Router } from '@angular/router';
-import { GoogleAuthProvider } from '@angular/fire/auth';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 @Injectable({
   providedIn: 'root'
@@ -10,6 +9,7 @@ export class AuthService {
   role!: string;
   username : string = '';
   orgTitle! : string;
+  errorMessage!: string;
   constructor(private fireauth: AngularFireAuth, private router: Router, private firestore : AngularFirestore, private route : ActivatedRoute) {
     this.route.queryParams.subscribe(params => {
       this.orgTitle = params['orgTitle'];
@@ -75,33 +75,6 @@ export class AuthService {
       alert(err.message)
     })
   }
-  googleSignIn() {
-    const provider = new GoogleAuthProvider();
-    provider.setCustomParameters({ prompt: 'select_account' });
-    return this.fireauth.signInWithPopup(provider).then(res => {
-      const user = res.user;
-      if (user?.photoURL !== "null") {
-        user?.updateProfile({
-          photoURL : "null",
-        }).then(() =>{
-          this.router.navigate(['./login/username'], {queryParams : {orgTitle : this.orgTitle}});
-        });
-        return;
-      }
-      else {
-        const userPromise = this.fireauth.currentUser;
-          userPromise.then((user) => {
-            const uid = user?.uid
-            const ref = this.firestore.collection('Organisations').doc(this.orgTitle).collection('users').doc(uid);
-            ref.get().subscribe((userDoc) => {
-            const role = userDoc.data()?.['role'];
-            localStorage.setItem('userRole', role);
-            this.router.navigate(['organisation/quizzes'], {queryParams : {orgTitle : this.orgTitle}});
-          });
-        });
-      }
-    });
-  };
   async updateProfile(displayName: string) {
     const user = await this.fireauth.currentUser;
     await user?.updateProfile({ displayName });

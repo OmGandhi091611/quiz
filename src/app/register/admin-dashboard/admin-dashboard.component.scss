@@ -104,6 +104,29 @@ a:hover{
   position: absolute;
   right: 0;
 }
+.spinner {
+  margin: 20px auto;
+}
+
+.counter-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 30px;
+}
+
+.counter-item {
+  margin: 0 20px;
+  text-align: center;
+}
+
+.counter-item h2 {
+  font-size: 48px;
+  margin: 0;
+}
+
+.counter-item p {
+  margin: 5px 0 0;
+}
 /*
 ##Device = Desktops
 ##Screen = 1281px to higher resolution desktops
